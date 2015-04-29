@@ -1,0 +1,40 @@
+{{#unless result}}
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>lcid</th>
+      <th>公司名</th>
+      <th>有无数据</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+  	{{#each data}}
+    <tr>
+      <th scope="row">{{@index}}</th>
+      <td>{{this.lcid}}</td>
+      <td>{{this.fei_entname}}</td>
+      <td>
+        {{#if this.status}}
+        <p class="text-success">有数据</p>
+        {{else}}
+        <p class="text-danger">无数据</p>
+        {{/if}}
+      </td>
+      <td>
+        {{#if this.status}}
+        <button type="button" class="btn btn-default disabled" data-toggle="modal" data-target="#dataOptions">下载数据</button>
+      	<a class="btn btn-default" href="#" role="button">查看树状图</a>     	
+      	<a class="btn btn-default" href="#" role="button">查看行业结构图</a>
+        {{else}}
+        <button type="button" class="btn btn-default loaddata-btn" data-enterprise="{{this.fei_entname}}" data-lcid="{{this.lcid}}" data-status = "{{this.status}}" data-toggle="modal" data-target="#dataOptions">下载数据</button>
+        {{/if}}
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+{{else}}
+    <p>{{meta.message}}</p>
+{{/unless}}

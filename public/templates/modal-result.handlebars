@@ -1,0 +1,7 @@
+{{#compare meta.code 200 operator="=="}}
+	<p class="text-success">{{meta.message}}</p>
+	<a class="btn btn-default companytree-btn" data-id="{{lcid}}" href="/showcompanytree/{{lcid}}" role="button">查看树状图</a> 	
+  	<a class="btn btn-default industry-btn" data-id="{{lcid}}" href="/showindustrytree/{{lcid}}" role="button">查看行业结构图</a>
+{{else}}
+	<p class="text-danger">{{meta.message}}</p>
+{{/compare}}

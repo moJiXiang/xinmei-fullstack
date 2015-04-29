@@ -1,0 +1,74 @@
+<div class="navbar-container">
+  
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">信美</a>
+      </div>
+      
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#">注册</a></li>
+          <li><a href="#">登录</a></li>
+        </ul>
+
+        <form class="navbar-form navbar-right" role="search">
+          <div class="form-group">
+            <input type="text" id="searchval" class="form-control" placeholder="搜人/搜公司">
+          </div>
+          <button type="button" id="search-btn" class="btn btn-default">搜索</button>
+        </form>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+  <div class="progress search-progress">
+    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+      <span class="sr-only">60% Complete</span>
+    </div>
+  </div>
+  <div class="col-lg-12 panel panel-default search-result" id="search-result">
+    <button type="button" id="close-search-btn" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <div id="search-list">
+      {{!-- pull results here --}}
+    </div>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="dataOptions" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">抓取数据选项</h4>
+        </div>
+        <div class="modal-body">
+          {{!-- <div class="form-group">
+            <label for="inputPassword" class="col-sm-2 control-label">分析深度</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="inputdeep" placeholder="3">
+            </div>
+          </div> --}}
+          <div class="progress loaddata-progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+              <span class="sr-only">60% Complete</span>
+            </div>
+          </div>
+          <div id="modal-result">
+            
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary" id="beginload-btn">开始</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
