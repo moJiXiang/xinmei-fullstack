@@ -9,7 +9,8 @@ var mongoose = require('mongoose'),
     sleep = require('sleep'),
     _ = require('lodash'),
     Qy = 'http://app.entplus.cn',
-    second = 1;
+    second = 1,
+	tasklist = [];
 
 // 组织结构化的数据返回
 exports.listAnalysisResult = function(req, res, next) {
@@ -124,7 +125,7 @@ exports.fQyGetInvestMent = function(req, res, next) {
 		if (err) {
 			res.json(new Status.NotFoundError('Not found results.'))
 		} else {
-			res.json(new Status.SuccessStatus('Find success.'));
+			res.json(new Status.SuccessStatus('Find success.', results));
 		}
 	})
 }
@@ -210,22 +211,21 @@ var initRequestOption = function(criteria, url) {
 	return options;
 }
 
-var tasklist = [];
 exports.loadQyEnterpriseData = function(req, res, next) {
 	// 根公司的id
 	var root = req.body.lcid;
-	getEnterAndRelationThenSave(root, function(err, results) {
-		// 递归查询并且保存,直到没有关系公司为止	
-		async.map(tasklist, getEnterAndRelationThenSave, function(err, results) {
-			if (err) {
-				res.json(new Status.NotFoundError('Not found results.'))
-			} else {
-				res.json(new Status.SuccessStatus('LoadData success.', tasklist));
-			}
-		})
+	// var asyncTask = [];
+
+	getEnterAndRelationThenSave(root, function(err) {
+		if (err) {
+			res.json(new Status.NotFoundError(err.message))
+		} else {
+			res.json(new Status.SuccessStatus('Load Data success.'));
+		}
 	})
 }
 var getEnterAndRelationThenSave = function(lcid, callback) {
+	tasklist =  _.drop(tasklist, tasklist.length);
 	async.parallel([
 		function(cb) {
 			getEnterpriseAndSave(lcid, cb);
@@ -240,8 +240,14 @@ var getEnterAndRelationThenSave = function(lcid, callback) {
 		if(err) {
 			callback(err);
 		} else {
-
-			callback(null, results);
+			// 递归查询并且保存,直到没有关系公司为止	
+			async.each(tasklist, getEnterAndRelationThenSave, function(err) {
+				if (err) {
+					callback(err);
+				} else {
+					callback(null);
+				}
+			})
 		}
 	})
 }

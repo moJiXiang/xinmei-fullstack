@@ -1,5 +1,7 @@
 var mongoose = require('mongoose'),
     Enterprise = mongoose.model('Enterprise'),
+    Entsrelation = mongoose.model('Entsrelation'),
+    Entprerelation = mongoose.model('Entprerelation'),
     Status = require('../helpers/status'),
     request = require('request'),
     async = require('async'),
@@ -116,3 +118,44 @@ var listSearchResultByQy = function (options, cb) {
 		}
 	});
 };
+
+exports.getEnterpriseLocal = function(lcid, cb) {
+	Enterprise.findOne({lcid: lcid})
+		//parse to js object
+		.lean()
+		.exec(function(err, result) {
+			if(err) {
+				cb(err);
+			} else {
+				cb(null, result);
+			}
+		})
+}
+
+exports.getMaininvestLocal = function(lcid, cb) {
+	Entsrelation.find({entsource: lcid})
+		.lean()
+		.exec(function(err, result) {
+			if(err) {
+				cb(err);
+			} else {
+				cb(null, result);
+			}
+		})
+}
+
+exports.getInvestmentLocal = function(lcid, cb) {
+	Entprerelation.find({enttarget: lcid})
+		.lean()
+		.exec(function(err, result) {
+			if(err) {
+				cb(err);
+			} else {
+				cb(null, result);
+			}
+		})
+}
+
+
+
+

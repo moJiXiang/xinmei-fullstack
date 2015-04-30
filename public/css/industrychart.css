@@ -1,0 +1,63 @@
+.chart-header {
+  position: relative;
+}
+.togglechart-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+svg {
+  font-size: 14px;
+}
+svg.outter {
+  stroke: #ddd;
+  stroke-width: 1px;
+}
+rect.colrect {
+  stroke-width: 1px;
+  stroke: #ddd;
+}
+.colrectline,
+.rowrectline {
+  stroke-width: 1px;
+  stroke: #000;
+}
+.rowrectline {
+  stroke-dasharray: 3, 3;
+}
+.rowrect {
+  fill: #fff;
+}
+.axis {
+  shape-rendering: crispEdges;
+}
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  stroke-width: .5px;
+}
+.yaxis {
+  fill: #000;
+}
+.yaxis path,
+.yaxis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.yaxis text {
+  font-family: sans-serif;
+  font-size: 11px;
+}
+.industrynode {
+  cursor: pointer;
+  fill: #fff;
+  stroke: #ddd;
+  stroke-width: 2;
+}
+.investmentnode {
+  fill: yellow;
+  stroke: #ddd;
+  stroke-width: 2;
+}

@@ -5,20 +5,22 @@
   <meta name="viewport" content="width=device-width">
   <title>信美项目DEMO</title>
   {{!-- include components css --}}
-  <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="/components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/components/bootstrap/dist/css/bootstrap-theme.min.css">
   {{!-- end include --}}
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/coverbootstrap.css">
   <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/enterprisetree.css">
+  <link rel="stylesheet" href="/css/industrychart.css">
   {{#if ENV_DEVELOPMENT}}
     <script src="http://localhost:35729/livereload.js"></script>
   {{/if}}
   {{!-- include components scripts --}}
-  <script src="components/jquery/dist/jquery.min.js"></script>
-  <script src="components/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script src="components/handlebars/handlebars.min.js"></script>
-  <script src="components/d3/d3.min.js"></script>
+  <script src="/components/jquery/dist/jquery.min.js"></script>
+  <script src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="/components/handlebars/handlebars.min.js"></script>
+  <script src="/components/d3/d3.min.js"></script>
   {{!-- end include --}}
   {{!-- include handlebars templates in public templates and compile into one file --}}
   <script src="/js/hbshelper.js"></script>
@@ -33,6 +35,6 @@
 
 </body>
   {{!-- include public scripts --}}
-  <script src="js/navbar.js"></script>
+  <script src="/js/navbar.js"></script>
   {{!-- end include --}}
 </html>

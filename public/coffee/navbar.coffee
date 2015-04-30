@@ -18,7 +18,7 @@ $ ->
 				time = setInterval(()->
 					$('.search-progress>.progress-bar').attr('style', "width: #{percent+=2}%")
 
-				500)
+				1000)
 			,
 			success: (result)->
 				postTemplate = JST['public/templates/search-results.handlebars']
@@ -52,6 +52,7 @@ $ ->
 				percent = 0
 				$('.loaddata-result').show()
 				$('.loaddata-progress>.progress-bar').attr('style', "width: 0%")
+				console.log 'test'
 				$.ajax({
 					type: 'POST',
 					url: "#{apiBaseUri}/loadqydata",
@@ -64,7 +65,7 @@ $ ->
 						time = setInterval(()->
 							$('.loaddata-progress>.progress-bar').attr('style', "width: #{percent+=1}%")
 
-						500)
+						1000)
 					,
 					success: (result)->
 						result.lcid = lcid;

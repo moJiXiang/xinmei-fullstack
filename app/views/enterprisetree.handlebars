@@ -1,0 +1,14 @@
+{{> navbar }}
+
+<div class="container">
+	<div class="page-header chart-header" id="entname" data-lcid="{{lcid}}">
+      <h3></h3>
+      <div class="btn-group togglechart-btn" role="group" aria-label="...">
+		  <a class="btn btn-default companytree-btn" data-id="{{lcid}}" href="/enterprise/{{lcid}}/enterprisetree" role="button">查看树状图</a> 	
+  		  <a class="btn btn-default industry-btn" data-id="{{lcid}}" href="/enterprise/{{lcid}}/industrychart" role="button">查看行业结构图</a>
+	  </div>
+    </div>
+    <div id="enterprisetree"></div>
+</div>
+
+<script src="/js/enterprisetree.example.js"></script>

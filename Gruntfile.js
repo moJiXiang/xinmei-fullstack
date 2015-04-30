@@ -23,7 +23,9 @@ module.exports = function (grunt) {
         files: {
           'public/css/style.css': 'public/css/style.less',
           'public/css/coverbootstrap.css': 'public/css/coverbootstrap.less',
-          'public/css/navbar.css': 'public/css/navbar.less'
+          'public/css/navbar.css': 'public/css/navbar.less',
+          'public/css/enterprisetree.css': 'public/css/enterprisetree.less',
+          'public/css/industrychart.css': 'public/css/industrychart.less'
         }
       }
     },
@@ -42,7 +44,9 @@ module.exports = function (grunt) {
         files: {
           'public/js/index.js' : 'public/coffee/index.coffee',
           'public/js/company.js' : 'public/coffee/company.coffee',
-          'public/js/navbar.js' : 'public/coffee/navbar.coffee'
+          'public/js/navbar.js' : 'public/coffee/navbar.coffee',
+          'public/js/enterprisetree.js' : 'public/coffee/enterprisetree.coffee',
+          'public/js/industrychart.js' : 'public/coffee/industrychart.coffee'
         }
       }
     },

@@ -22,7 +22,8 @@ EntsrelationSchema.pre('save', function(next) {
 		 	if(err) {
 		 		next(err);
 		 	} else if(result) {
-		 		next(new Error("Must specify!"));
+		 		// console.log(result.entname + ' Entsrelation has been saved!')
+		 		next(new Error(result.entname + " Entsrelation Must specify!"));
 		 	} else {
 		 		next();
 		 	}

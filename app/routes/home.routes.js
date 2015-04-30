@@ -8,16 +8,7 @@ module.exports = function (app) {
 };
   
 router.get('/', function(req, res, next) {
-  httphelps.get(apiBaseUri + '/articles', function(results) {
+  // httphelps.get(apiBaseUri + '/index', function(results) {
 		res.render('index');
-  })
+  // })
 })
-
-// router.post('/searchpage', function(req, res, next) {
-//   var searchval = req.body.searchval;
-//   httphelps.get(apiBaseUri + '/search/' + searchval , function(results) {
-//     res.render('searchpage')
-//   })
-// })
-
-

@@ -24,9 +24,9 @@
       </td>
       <td>
         {{#if this.status}}
-        <button type="button" class="btn btn-default disabled" data-toggle="modal" data-target="#dataOptions">下载数据</button>
-      	<a class="btn btn-default" href="#" role="button">查看树状图</a>     	
-      	<a class="btn btn-default" href="#" role="button">查看行业结构图</a>
+        <button type="button" class="btn btn-default disabled" data-enterprise="{{this.fei_entname}}" data-lcid="{{this.lcid}}" data-status = "{{this.status}}" data-toggle="modal" data-target="#dataOptions">下载数据</button>
+      	<a class="btn btn-default" href="/enterprise/{{lcid}}/enterprisetree" role="button">查看树状图</a>     	
+      	<a class="btn btn-default" href="/enterprise/{{lcid}}/industrychart" role="button">查看行业结构图</a>
         {{else}}
         <button type="button" class="btn btn-default loaddata-btn" data-enterprise="{{this.fei_entname}}" data-lcid="{{this.lcid}}" data-status = "{{this.status}}" data-toggle="modal" data-target="#dataOptions">下载数据</button>
         {{/if}}

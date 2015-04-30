@@ -38,12 +38,13 @@ var EnterpriseSchema = new Schema({
 EnterpriseSchema.pre('save', function(next) {
 	var self = this;
 	mongoose.model('Enterprise').findOne({lcid: this.lcid})
-		 .select('lcid')
+		 .select('entname')
 		 .exec(function(err, result) {
 		 	if(err) {
 		 		next(err);
 		 	} else if(result) {
-		 		next(new Error("Must specify!"));
+		 		// console.log(result.entname + ' has been saved!')
+		 		next(new Error(result.entname + " Enterprise Must specify!"));
 		 	} else {
 		 		next();
 		 	}
@@ -62,7 +63,7 @@ EnterpriseSchema.statics = {
 			.limit(options.limit || 10)
 			.skip(options.offset || 0)
 			.exec(cb);
-	} 
+	}
 }
 
 mongoose.model('Enterprise', EnterpriseSchema);

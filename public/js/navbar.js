@@ -17,7 +17,7 @@
           $('.search-progress').show();
           return time = setInterval(function() {
             return $('.search-progress>.progress-bar').attr('style', "width: " + (percent += 2) + "%");
-          }, 500);
+          }, 1000);
         },
         success: function(result) {
           var html, postTemplate;
@@ -48,6 +48,7 @@
           percent = 0;
           $('.loaddata-result').show();
           $('.loaddata-progress>.progress-bar').attr('style', "width: 0%");
+          console.log('test');
           return $.ajax({
             type: 'POST',
             url: apiBaseUri + "/loadqydata",
@@ -58,7 +59,7 @@
               $('.loaddata-progress').show();
               return time = setInterval(function() {
                 return $('.loaddata-progress>.progress-bar').attr('style', "width: " + (percent += 1) + "%");
-              }, 500);
+              }, 1000);
             },
             success: function(result) {
               var html, postTemplate;
