@@ -43,7 +43,6 @@ module.exports = function (grunt) {
       compile: {
         files: {
           'public/js/index.js' : 'public/coffee/index.coffee',
-          'public/js/company.js' : 'public/coffee/company.coffee',
           'public/js/navbar.js' : 'public/coffee/navbar.coffee',
           'public/js/enterprisetree.js' : 'public/coffee/enterprisetree.coffee',
           'public/js/industrychart.js' : 'public/coffee/industrychart.coffee'

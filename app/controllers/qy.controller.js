@@ -8,9 +8,9 @@ var mongoose = require('mongoose'),
     async = require('async'),
     sleep = require('sleep'),
     _ = require('lodash'),
+    search = require('./search.controller'),
     Qy = 'http://app.entplus.cn',
-    second = 1,
-	tasklist = [];
+    second = 1;
 
 // 组织结构化的数据返回
 exports.listAnalysisResult = function(req, res, next) {
@@ -225,7 +225,6 @@ exports.loadQyEnterpriseData = function(req, res, next) {
 	})
 }
 var getEnterAndRelationThenSave = function(lcid, callback) {
-	tasklist =  _.drop(tasklist, tasklist.length);
 	async.parallel([
 		function(cb) {
 			getEnterpriseAndSave(lcid, cb);
@@ -241,7 +240,32 @@ var getEnterAndRelationThenSave = function(lcid, callback) {
 			callback(err);
 		} else {
 			// 递归查询并且保存,直到没有关系公司为止	
-			async.each(tasklist, getEnterAndRelationThenSave, function(err) {
+			
+			async.waterfall([
+				function(cb) {
+					search.getMaininvestLocal(lcid, function(err, results) {
+						if(err) {
+							cb(err);
+						} else{
+							
+							var tasklist = _.map(results, function(result) {
+								return result.enttarget;
+							})
+							cb(null, tasklist);
+						}
+					});
+				},
+				function(tasklist, cb) {
+
+					async.each(tasklist, getEnterAndRelationThenSave, function(err) {
+						if (err) {
+							cb(err);
+						} else {
+							cb(null);
+						}
+					})
+				}
+			], function(err, results) {
 				if (err) {
 					callback(err);
 				} else {
@@ -263,6 +287,7 @@ var getEnterpriseAndSave = function(lcid, callback) {
 				if(err) {
 					cb(err);
 				} else {
+					console.log(result.fei_entname);
 					cb(null, result);
 				}
 			})
@@ -318,9 +343,6 @@ var getEntsRelationAndSave = function(lcid, callback) {
 					// 如果查找投资的公司有结果则返回tasklist列表
 					// 如果没有直接返回callback函数
 					if(relations.length > 0) {
-						tasklist = _.map(relations, function(rel) {
-							return rel.sub_lcid;
-						})
 						cb(null, relations);
 					} else {
 						callback(null);
@@ -329,6 +351,7 @@ var getEntsRelationAndSave = function(lcid, callback) {
 			})
 		},
 		function(relations, cb) {
+
 			saveEntsRelation(relations, function(err, results) {
 				if(err) {
 					cb(err);
@@ -336,6 +359,7 @@ var getEntsRelationAndSave = function(lcid, callback) {
 					cb(null, results);
 				}
 			})
+			
 		}
 	], 
 	function(err, results) {

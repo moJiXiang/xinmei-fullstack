@@ -66,7 +66,6 @@ Network = ()->
 			.nice()
 		# 计算宽度
 		titles.forEach (t)->
-			console.log widthRange(widthValues.get(t))
 			width += widthRange(widthValues.get(t)) * 2 + paddinginner * 2
 		width += paddingLeft
 
@@ -95,8 +94,6 @@ Network = ()->
 
 	setupData = (data)->
 		# 计算一些基本数据
-		console.log '+++++++++++'
-		console.log(data.nodes)
 		data.nodes.forEach (n)->
 			if titles.indexOf(n.entindustry)<0
 				titles.push(n.entindustry)
@@ -292,6 +289,7 @@ Network = ()->
 				.call(yAxis)
 
 	place = ()->
+
 		allData.nodes.forEach (n)->
 			key = n.lcid
 			obj = {}
@@ -328,7 +326,6 @@ Network = ()->
 				)
 			.attr("cy", (d)-> 
 				# domainH = heightValues.get(d.deep)
-				# console.log domainH
 				# heightRange.domain([0, domainH.max / multiple])
 				# needH = ((height - paddingTop * 3) / deepNum) * (Number(d.deep) - 1) + heightRange(Number(d.regcap)/multiple)
 				# needH + paddingTop * 3
@@ -339,7 +336,6 @@ Network = ()->
 				center = {}
 				center.x = nodePosition.get(d.lcid).x
 				center.y = nodePosition.get(d.lcid).y
-				console.log center
 				drawInvestment center, d.investment
 				)
 	appendEntname = ()->
@@ -375,16 +371,20 @@ Network = ()->
 			.attr("class", "industrylink")
 			.attr("stroke", "#ddd")
 			.attr("x1", (d)->
-				nodePosition.get(d.entsource).x
+				if nodePosition.get(d.entsource)
+					nodePosition.get(d.entsource).x
 				)
 			.attr("y1", (d)->
-				nodePosition.get(d.entsource).y
+				if nodePosition.get(d.entsource)
+					nodePosition.get(d.entsource).y
 				)
 			.attr("x2", (d)->
-				nodePosition.get(d.enttarget).x
+				if nodePosition.get(d.enttarget)
+					nodePosition.get(d.enttarget).x
 				)
 			.attr("y2", (d)->
-				nodePosition.get(d.enttarget).y
+				if nodePosition.get(d.enttarget)
+					nodePosition.get(d.enttarget).y
 				)
 	drawInvestment = (center, investment)->
 		if d3.select('.investments')
@@ -426,7 +426,6 @@ industryNetwork = Network()
 
 lcid = $('#entname').data('lcid');
 d3.json '/v1/api/analysis/'+lcid+'/industrychart', (json) ->
-	console.log(json)
 
 	data = json.data
 	entname = null

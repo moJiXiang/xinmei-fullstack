@@ -49,7 +49,6 @@
       setupData(data);
       widthRange.domain([minValue, maxValue]).nice();
       titles.forEach(function(t) {
-        console.log(widthRange(widthValues.get(t)));
         return width += widthRange(widthValues.get(t)) * 2 + paddinginner * 2;
       });
       width += paddingLeft;
@@ -67,8 +66,6 @@
     };
     setupData = function(data) {
       var j, max, min, num, obj, ref, results;
-      console.log('+++++++++++');
-      console.log(data.nodes);
       data.nodes.forEach(function(n) {
         if (titles.indexOf(n.entindustry) < 0) {
           titles.push(n.entindustry);
@@ -253,7 +250,6 @@
         center = {};
         center.x = nodePosition.get(d.lcid).x;
         center.y = nodePosition.get(d.lcid).y;
-        console.log(center);
         return drawInvestment(center, d.investment);
       });
     };
@@ -276,13 +272,21 @@
       linksGroup = container.append("svg:g").attr("class", "links");
       links = linksGroup.selectAll('line.line').data(allData.links);
       return links.enter().append('line').attr("class", "industrylink").attr("stroke", "#ddd").attr("x1", function(d) {
-        return nodePosition.get(d.entsource).x;
+        if (nodePosition.get(d.entsource)) {
+          return nodePosition.get(d.entsource).x;
+        }
       }).attr("y1", function(d) {
-        return nodePosition.get(d.entsource).y;
+        if (nodePosition.get(d.entsource)) {
+          return nodePosition.get(d.entsource).y;
+        }
       }).attr("x2", function(d) {
-        return nodePosition.get(d.enttarget).x;
+        if (nodePosition.get(d.enttarget)) {
+          return nodePosition.get(d.enttarget).x;
+        }
       }).attr("y2", function(d) {
-        return nodePosition.get(d.enttarget).y;
+        if (nodePosition.get(d.enttarget)) {
+          return nodePosition.get(d.enttarget).y;
+        }
       });
     };
     drawInvestment = function(center, investment) {
@@ -326,7 +330,6 @@
 
   d3.json('/v1/api/analysis/' + lcid + '/industrychart', function(json) {
     var data, entname;
-    console.log(json);
     data = json.data;
     entname = null;
     data.nodes.forEach(function(n) {
