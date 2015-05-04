@@ -6,35 +6,35 @@ var config = {
   development: {
     root: rootPath,
     app: {
-      name: 'restful-express'
+      name: 'xinmei'
     },
     domain: 'http://127.0.0.1',
     apiBaseUri: '/v1/api',
     port: 3000,
-    db: 'mongodb://localhost/restful-express-development'
+    db: 'mongodb://localhost/xinmei-development'
     // db: 'mongodb://192.168.14.126:27017/Xinmei'
   },
 
   test: {
     root: rootPath,
     app: {
-      name: 'restful-express'
+      name: 'xinmei'
     },
     domain: 'http://127.0.0.1',
     apiBaseUri: '/v1/api',
     port: 3000,
-    db: 'mongodb://localhost/restful-express-test'
+    db: 'mongodb://localhost/xinmei-test'
   },
 
   production: {
     root: rootPath,
     app: {
-      name: 'restful-express'
+      name: 'xinmei'
     },
     domain: 'http://127.0.0.1',
     apiBaseUri: '/v1/api',
     port: 3000,
-    db: 'mongodb://localhost/restful-express-production'
+    db: 'mongodb://localhost/xinmei-production'
   }
 };
 
