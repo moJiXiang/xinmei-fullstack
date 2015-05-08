@@ -263,6 +263,13 @@
           return 1.0;
         }
       });
+      nodes.style("stroke", function(n) {
+        if (neighboring(d, n)) {
+          return "rgb(200,113,114)";
+        } else {
+          return "#ddd";
+        }
+      });
       entnames.style('opacity', function(n) {
         if (neighboring(d, n)) {
           return 1.0;
@@ -275,6 +282,13 @@
           return 5.0;
         } else {
           return 1.0;
+        }
+      });
+      links.style("stroke", function(n) {
+        if (n.enttarget === d.lcid || n.entsource === d.lcid) {
+          return "rgb(200,113,114)";
+        } else {
+          return "#ddd";
         }
       });
       center = {};
@@ -290,7 +304,9 @@
       d3.select('.investments').remove();
       nodes.style("stroke-width", 2.0);
       entnames.style('opacity', 1.0);
-      return links.style("stroke-width", 1.0);
+      links.style("stroke-width", 1.0);
+      nodes.style("stroke", "#ddd");
+      return links.style("stroke", "#ddd");
     };
     neighboring = function(a, b) {
       return linkedByIndex[a.lcid + ', ' + b.lcid] || linkedByIndex[b.lcid + ', ' + a.lcid] || a.lcid === b.lcid;
@@ -367,6 +383,7 @@
         coordinate = radialLocation(center, startangle, radius);
         obj.x = coordinate.x;
         obj.y = coordinate.y;
+        obj.startangle = startangle;
         return startangle += angle;
       });
       investmentGroup = container.append("svg:g").attr("class", "investments");
@@ -391,7 +408,10 @@
       });
       investmentGroup.append("defs").append("marker").attr("id", "arrowhead").attr("refX", 4).attr("refY", 2).attr("markerWidth", 6).attr("markerHeight", 4).attr("orient", "auto").append("path").attr("d", "M 0,0 V 4 L6,2 Z");
       investments.selectAll("path").data(investment).enter().append("svg:path").attr("class", "link").attr("d", function(d) {
-        return "M" + d.x + "," + d.y + " L" + center.x + "," + center.y;
+        var sidecoordinate;
+        sidecoordinate = radialLocation(center, d.startangle, center.r + 4);
+        console.log(sidecoordinate);
+        return "M" + d.x + "," + d.y + " L" + sidecoordinate.x + "," + sidecoordinate.y;
       }).attr("marker-end", "url(#arrowhead)");
       return investments.exit().remove();
     };

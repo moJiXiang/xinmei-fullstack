@@ -352,12 +352,25 @@ Network = ()->
 		nodes.style("stroke-width", (n)->
 			if (neighboring(d, n) ) then 5.0 else 1.0
 		)
+		nodes.style("stroke", (n)->
+			if (neighboring(d, n))
+				"rgb(200,113,114)"
+			else
+				"#ddd"
+		)
 		entnames.style('opacity', (n)->
 			if (neighboring(d, n) ) then 1.0 else 0.0
 		)
 		links.style("stroke-width", (n)->
 			if (n.enttarget is d.lcid or n.entsource is d.lcid) then 5.0 else 1.0
 		)
+		links.style("stroke", (n)->
+			if (n.enttarget is d.lcid or n.entsource is d.lcid)
+				"rgb(200,113,114)"
+			else
+				"#ddd"
+		)
+
 		center = {}
 		center.x = nodePosition.get(d.lcid).x
 		center.y = nodePosition.get(d.lcid).y
@@ -373,6 +386,8 @@ Network = ()->
 		nodes.style("stroke-width", 2.0)
 		entnames.style('opacity', 1.0)
 		links.style("stroke-width", 1.0)
+		nodes.style("stroke", "#ddd")
+		links.style("stroke", "#ddd")
 
 	# 给两个点，然后通过linkedByindex来判断是否有关系
 	neighboring = (a, b)->
@@ -469,6 +484,7 @@ Network = ()->
 			coordinate = radialLocation center, startangle, radius
 			obj.x = coordinate.x
 			obj.y = coordinate.y
+			obj.startangle = startangle
 			startangle += angle
 		investmentGroup = container.append("svg:g")
 			.attr("class", "investments")
@@ -515,7 +531,9 @@ Network = ()->
 			.append("svg:path")
 			.attr("class", "link")
 			.attr("d", (d)-> 
-				"M#{d.x},#{d.y} L#{center.x},#{center.y}"
+				sidecoordinate = radialLocation(center, d.startangle, center.r + 4)
+				console.log(sidecoordinate)
+				"M#{d.x},#{d.y} L#{sidecoordinate.x},#{sidecoordinate.y}"
 			)
 			.attr("marker-end", "url(#arrowhead)")
 
