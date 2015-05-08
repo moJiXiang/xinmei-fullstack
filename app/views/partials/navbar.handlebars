@@ -41,7 +41,7 @@
     </div>
   </div>
   <!-- Modal -->
-  <div class="modal fade" id="dataOptions" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal fade" id="qydatamodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -55,6 +55,87 @@
               <input type="text" class="form-control" id="inputdeep" placeholder="3">
             </div>
           </div> --}}
+          <div class="progress loaddata-progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+              <span class="sr-only">60% Complete</span>
+            </div>
+          </div>
+          <div id="modal-result">
+            
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary" id="beginload-btn">开始</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="articledatamodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">搜索规则</h4>
+        </div>
+        <div class="modal-body">
+          <div class="radio">
+            <label class="col-sm-3">
+              <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+              完全匹配
+            </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="inputdeep" placeholder='例如: "中新恒超实业有限公司"'>
+            </div>
+          </div>
+          <div class="radio">
+            <label class="col-sm-3">
+              <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+              排除
+            </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="inputdeep" placeholder="例如: 中新恒超实业有限公司 -招聘">
+            </div>
+          </div>
+          <div class="radio">
+            <label class="col-sm-3">
+              <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+              通配
+            </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="inputdeep" placeholder="例如: 中新*公司">
+            </div>
+          </div>
+          <div class="radio">
+            <label class="col-sm-3">
+              <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+              标题包含
+            </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="inputdeep" placeholder="例如: intitle:中新恒超实业有限公司">
+            </div>
+          </div>
+          <div class="radio">
+            <label class="col-sm-3">
+              <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+              标题包含多组关键字
+            </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="inputdeep" placeholder="例如: allintitle:中新恒超实业有限公司 招聘">
+            </div>
+          </div>
+          <div class="radio">
+            <label class="col-sm-3">
+              <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+              多组关键字
+            </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="inputdeep" placeholder="例如: 中新恒超实业有限公司 招聘">
+            </div>
+          </div>
+
           <div class="progress loaddata-progress">
             <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
               <span class="sr-only">60% Complete</span>

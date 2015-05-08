@@ -421,7 +421,7 @@ var getEntpreRelationAndSave = function(lcid, callback) {
 var saveEntpreRelation = function(relations, callback) {
 	relations = _.map(relations, function(rel) {
 		return {
-			entsource: rel.lcid,
+			entsource: rel.sub_lcid,
 			entpre: rel.eii_inv,
 			conprop: rel.conprop,
 			enttarget: rel.lcid,

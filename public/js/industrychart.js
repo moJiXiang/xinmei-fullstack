@@ -2,11 +2,13 @@
   var Network, industryNetwork, lcid;
 
   Network = function() {
-    var allData, appendChartTitle, appendColRects, appendEntname, appendLinks, appendNodes, appendRowRects, appendXAxis, appendYAxis, biggerH, calculateHeight, color, colrects, colrectsGroup, colswidth, container, deepCompany, deepNum, drawInvestment, entNameGroup, entindustryArr, entnames, height, heightRange, heightValues, investmentGroup, investmentnodes, links, linksGroup, maxRectHeight, maxValue, minRectHeight, minValue, multiple, network, nodePosition, nodes, nodesGroup, paddingLeft, paddingTop, paddinginner, place, rectWidthValues, rowrects, rowrectsGroup, setupData, shiftValues, shiftx, shifty, titles, width, widthRange, widthValues;
+    var allData, appendChartTitle, appendColRects, appendEntname, appendLinks, appendNodes, appendRowRects, appendXAxis, appendYAxis, biggerH, calculateHeight, color, colrects, colrectsGroup, colswidth, container, deepCompany, deepNum, drawInvestment, entNameGroup, entindustryArr, entnames, height, heightRange, heightValues, hideDetails, img_h, img_w, investmentGroup, investments, linkedByIndex, links, linksGroup, maxRectHeight, maxValue, minRectHeight, minValue, multiple, neighboring, network, nodePosition, nodes, nodesGroup, paddingLeft, paddingTop, paddinginner, place, rectWidthValues, rowrects, rowrectsGroup, setupData, shiftValues, shiftx, shifty, showDetails, titles, width, widthRange, widthValues;
     container = null;
     allData = null;
     width = 0;
     height = 800;
+    img_w = 40;
+    img_h = 40;
     biggerH = 800;
     paddingTop = 20;
     paddingLeft = 80;
@@ -21,7 +23,7 @@
     nodes = null;
     links = null;
     entnames = null;
-    investmentnodes = null;
+    investments = null;
     minValue = null;
     maxValue = null;
     minRectHeight = null;
@@ -32,7 +34,7 @@
     linksGroup = null;
     entNameGroup = null;
     investmentGroup = null;
-    widthRange = d3.scale.linear().range([10, 40]);
+    widthRange = d3.scale.linear().range([10, 60]);
     heightRange = d3.scale.linear();
     widthValues = d3.map();
     heightValues = d3.map();
@@ -41,6 +43,7 @@
     shiftValues = d3.map();
     shiftx = paddingLeft;
     shifty = 0;
+    linkedByIndex = {};
     colswidth = 0;
     calculateHeight = 0;
     color = d3.scale.category20();
@@ -65,7 +68,7 @@
       return appendEntname();
     };
     setupData = function(data) {
-      var j, max, min, num, obj, ref, results;
+      var j, max, min, num, obj, ref;
       data.nodes.forEach(function(n) {
         if (titles.indexOf(n.entindustry) < 0) {
           titles.push(n.entindustry);
@@ -119,7 +122,6 @@
         obj.maxregcap = max;
         return entindustryArr.push(obj);
       });
-      results = [];
       for (num = j = 1, ref = deepNum; 1 <= ref ? j <= ref : j >= ref; num = 1 <= ref ? ++j : --j) {
         min = null;
         max = null;
@@ -152,9 +154,11 @@
         });
         obj.minregcap = min;
         obj.maxregcap = max;
-        results.push(deepCompany.push(obj));
+        deepCompany.push(obj);
       }
-      return results;
+      return data.links.forEach(function(l) {
+        return linkedByIndex[l.entsource + ", " + l.enttarget] = 1;
+      });
     };
     appendChartTitle = function() {
       return container.append("svg:text").attr("text-anchor", "middle").attr("x", width / 2).attr("y", paddingTop).text("投资图");
@@ -174,7 +178,9 @@
         rectWidthValues.set(d.entindustry, sfx);
         return "translate(" + shiftx + ", " + (paddingTop * 3) + ")";
       }).attr("fill", "#fff");
-      colrects.append("svg:text").attr("y", -10).attr("fill", "#000").text(function(d) {
+      colrects.append("svg:text").attr("class", "industrytitle").attr("y", -10).attr("transform", function(d) {
+        return "translate(20) rotate(-10)";
+      }).attr("fill", "#000").text(function(d) {
         return d.entindustry;
       });
       colrects.append("svg:rect").attr("class", "colrect").attr("width", function(d) {}).attr("height", height);
@@ -245,13 +251,48 @@
         return nodePosition.get(d.lcid).x;
       }).attr("cy", function(d) {
         return nodePosition.get(d.lcid).y;
-      }).on('click', function(d) {
-        var center;
-        center = {};
-        center.x = nodePosition.get(d.lcid).x;
-        center.y = nodePosition.get(d.lcid).y;
-        return drawInvestment(center, d.investment);
+      }).on('mouseover', showDetails).on('mouseout', hideDetails);
+    };
+    showDetails = function(d, i) {
+      var center, clearInvestment;
+      nodes.style("stroke-width", function(n) {
+        if (neighboring(d, n)) {
+          return 5.0;
+        } else {
+          return 1.0;
+        }
       });
+      entnames.style('opacity', function(n) {
+        if (neighboring(d, n)) {
+          return 1.0;
+        } else {
+          return 0.0;
+        }
+      });
+      links.style("stroke-width", function(n) {
+        if (n.enttarget === d.lcid || n.entsource === d.lcid) {
+          return 5.0;
+        } else {
+          return 1.0;
+        }
+      });
+      center = {};
+      center.x = nodePosition.get(d.lcid).x;
+      center.y = nodePosition.get(d.lcid).y;
+      center.r = nodePosition.get(d.lcid).r;
+      clearInvestment = d.investment.filter(function(invest) {
+        return !linkedByIndex[invest.entsource + ', ' + invest.enttarget];
+      });
+      return drawInvestment(center, clearInvestment);
+    };
+    hideDetails = function(d, i) {
+      d3.select('.investments').remove();
+      nodes.style("stroke-width", 2.0);
+      entnames.style('opacity', 1.0);
+      return links.style("stroke-width", 1.0);
+    };
+    neighboring = function(a, b) {
+      return linkedByIndex[a.lcid + ', ' + b.lcid] || linkedByIndex[b.lcid + ', ' + a.lcid] || a.lcid === b.lcid;
     };
     appendEntname = function() {
       entNameGroup = container.append("svg:g").attr("class", "entnames");
@@ -263,7 +304,7 @@
       }).attr('transform', function(d) {
         var entnamewidth;
         entnamewidth = d.entname.length * 10;
-        return "translate(" + (-nodePosition.get(d.lcid).r - entnamewidth / 2) + ", " + (-nodePosition.get(d.lcid).r - 10) + ")";
+        return "translate(" + (-entnamewidth / 2) + ", " + (-nodePosition.get(d.lcid).r - 10) + ")";
       }).text(function(d) {
         return d.entname;
       });
@@ -291,9 +332,7 @@
     };
     drawInvestment = function(center, investment) {
       var angle, radialLocation, radius, startangle;
-      if (d3.select('.investments')) {
-        d3.select('.investments').remove();
-      }
+      d3.select('.investments').remove();
       startangle = 0;
       angle = 360 / investment.length;
       radius = 100;
@@ -314,12 +353,24 @@
         return startangle += angle;
       });
       investmentGroup = container.append("svg:g").attr("class", "investments");
-      investmentnodes = investmentGroup.selectAll("circle.investment").data(investment);
-      return investmentnodes.enter().append("circle").attr("class", "investmentnode").attr('r', 10).attr("cx", function(d) {
-        return d.x;
-      }).attr("cy", function(d) {
-        return d.y;
+      investments = investmentGroup.selectAll("g.investment").data(investment);
+      investments.enter().append("svg:g").insert('image').attr("class", "investmentimage").attr("width", img_w).attr("height", img_h).attr("x", function(d) {
+        return d.x - img_w / 2;
+      }).attr("y", function(d) {
+        return d.y - img_h / 2;
+      }).attr("xlink:href", '/img/grayman.png');
+      investments.enter().append("svg:g").insert('text').attr("class", "investmentname").attr("x", function(d) {
+        return d.x - d.entpre.length * 10 / 2;
+      }).attr("y", function(d) {
+        return d.y - img_h / 2 - 10;
+      }).text(function(d) {
+        return d.entpre;
       });
+      investmentGroup.append("defs").append("marker").attr("id", "arrowhead").attr("refX", 4).attr("refY", 2).attr("markerWidth", 6).attr("markerHeight", 4).attr("orient", "auto").append("path").attr("d", "M 0,0 V 4 L6,2 Z");
+      investments.selectAll("path").data(investment).enter().append("svg:path").attr("class", "link").attr("d", function(d) {
+        return "M" + d.x + "," + d.y + " L" + center.x + "," + center.y;
+      }).attr("marker-end", "url(#arrowhead)");
+      return investments.exit().remove();
     };
     return network;
   };

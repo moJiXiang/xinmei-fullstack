@@ -6,6 +6,8 @@ var mongoose = require('mongoose'),
     request = require('request'),
     async = require('async'),
     _ = require('lodash'),
+    zlib = require('zlib'),
+    cheerio = require('cheerio'),
     Qy = 'http://app.entplus.cn';
 
 /**
@@ -154,6 +156,97 @@ exports.getInvestmentLocal = function(lcid, cb) {
 				cb(null, result);
 			}
 		})
+}
+
+/**
+ * 从google, baidu, sougo, bing 等引擎来抓取信息数据
+ */
+
+exports.listSearchFromEngine = function(req, res, next) {
+	var options = {
+		"wd": '中新恒超实业有限公司',
+		"pn": '0'
+	}
+	new bdsearch(options, function(results) {
+		res.json(new Status.SuccessStatus('Find success.', results));
+	}).request();
+}
+
+var bdsearch = function(options, cb) {
+	options = options || {};
+	this.pn = options.pn || 0
+	this.wd = options.wd;
+	this.callback = cb || function(s){};
+	this.result = {
+		wd: this.wd,
+		pn: this.pn
+	};
+	this.config = {
+		base_url: 'https://www.baidu.com',
+		lang: 'zh-CN'
+	};
+};
+
+bdsearch.prototype.parseResponse = function(body) {
+	var $ = cheerio.load(body);
+	var results = $(body).find('#content_left').find('.result');
+	var arr = [];
+
+	_.forEach(results, function(re) {
+		var obj = {
+			// TODO: 用正则匹配中文
+			title: $(this).find('h3.t>a').html().match(),
+			url: $(this).find('h3.t>a').attr('href'),
+			content: $(this).find('c-abstract').html().match()
+		}
+		arr.push(obj);
+	})
+	return arr;
+}
+
+bdsearch.prototype.request = function () {
+	var self = this;
+	if (!this.wd) {
+		this.callback([]);
+		return;
+	}
+	var qs = {
+		pn: this.pn,
+		wd: this.wd
+	};
+
+	var headers = {
+		'Host': 'www.baidu.com',
+		'connection': 'keep-alive',
+		'accept-encoding': 'gzip,deflate,sdch',
+		'accept-language': 'zh-CN,zh;q=0.8,en;q=0.6',
+		'cookie':'BAIDUID=FD287C53857547B0E88CB58488BBEBFB:FG=1; BIDUPSID=FD287C53857547B0E88CB58488BBEBFB; BDUSS=EJHaVQ0ZTNrdy1lRWdIQ0pSbWhrSGxwS2tpNEM1TX53TVNlVXpjWDhpaG9LMmxWQVFBQUFBJCQAAAAAAAAAAAEAAAB9wUwOvanKrOzhz8jJ-gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGieQVVonkFVO; ispeed_lsm=0; BDRCVFR[S4-dAuiWMmn]=I67x6TjHwwYf0; BD_HOME=1; BDRCVFR[feWj1Vr5u3D]=I67x6TjHwwYf0; BD_CK_SAM=1; H_PS_PSSID=13562_1448_13693_13461_13075_12825_10812_12868_13322_10563_12723_13892_13761_13257_13780_11876_13837_13623_13085_8500; BD_UPN=123253; H_PS_645EC=f7c4LCZHHUuxGrttgRqxS%2Bg00vZ95u%2FDFdpxE1bJjDxLKoRCMkpPkRmDLBk',
+		'referer': this.config.base_url
+	};
+
+	var options = {
+		hostname: 'www.baidu.com',
+		url: this.config.base_url + '/s',
+		encoding: null,
+		method: 'GET',
+		headers: headers,
+		qs: qs
+	}
+	// console.log(options);
+	request(options, function(err, res, body) {
+		if (!err && res.statusCode == 200) {
+			var res_encoding = res.headers['content-encoding'];
+			if (res_encoding.indexOf('gzip') >= 0) {
+				zlib.unzip(body, function(err, buffer) {
+					body = buffer.toString();
+					// self.callback(self.parseResponse(body))
+					self.callback(body)
+				})
+			} else {
+				self.callback(self.parseResponse(body));
+			}
+		}
+	})
 }
 
 

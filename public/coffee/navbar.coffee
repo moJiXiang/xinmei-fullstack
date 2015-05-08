@@ -25,7 +25,8 @@ $ ->
 				html = postTemplate(result)
 				$('#search-list').html(html)
 				# 给动态的元素添加事件
-				bindLoadFuc();
+				bindLoadQyFuc();
+				bingLoadArticleFuc();
 			,
 			complete: ()->
 				clearInterval(time)
@@ -40,7 +41,7 @@ $ ->
 		$('.search-result').hide()
 	)
 
-	bindLoadFuc = ()->
+	bindLoadQyFuc = ()->
 		# 表格里面loaddata按钮功能
 		$('.loaddata-btn').on('click', ()->
 			# enterprise = $(this).data('enterprise')
@@ -83,7 +84,13 @@ $ ->
 				})
 			)
 		)
-
+	
+	# 给每个下载文章信息按钮绑定事件
+	bingLoadArticleFuc = ()->
+		$('.loadarticles-btn').on('click', ()->
+			enterprise = $(this).data('enterprise')
+			
+		)
 
 
 

@@ -4,6 +4,8 @@ Network = ()->
 	allData  = null
 	width = 0
 	height = 800
+	img_w = 40
+	img_h = 40
 	biggerH = 800
 	paddingTop = 20
 	paddingLeft = 80
@@ -26,7 +28,7 @@ Network = ()->
 	# 所有的公司名字
 	entnames = null
 	# 每个公司绘制股东的点
-	investmentnodes = null
+	investments = null
 	# 毎列圆的半径的值
 	minValue = null
 	maxValue = null
@@ -41,7 +43,7 @@ Network = ()->
 	investmentGroup = null
 	# 所有圆的半径的阈值
 	widthRange = d3.scale.linear()
-		.range([10, 40])
+		.range([10, 60])
 	# 毎列资金的阈值
 	heightRange = d3.scale.linear()
 	widthValues = d3.map()
@@ -52,7 +54,8 @@ Network = ()->
 	shiftValues = d3.map()
 	shiftx = paddingLeft
 	shifty = 0
-
+	# 将有关系的点存到数组里面
+	linkedByIndex = {}
 	# 所有列的宽度
 	colswidth = 0
 	calculateHeight = 0
@@ -90,7 +93,6 @@ Network = ()->
 		appendLinks()
 		appendNodes()
 		appendEntname()
-		# appendTitle()
 
 	setupData = (data)->
 		# 计算一些基本数据
@@ -168,6 +170,9 @@ Network = ()->
 			obj.maxregcap = max
 			deepCompany.push(obj)
 
+		# 将和每个点相关的点存到d3.map数组里面
+		data.links.forEach (l)->
+			linkedByIndex["#{l.entsource}, #{l.enttarget}"] = 1
 
 	appendChartTitle = ()->
 		container.append("svg:text")
@@ -203,7 +208,10 @@ Network = ()->
 			# .attr("fill", (d)-> color(d.entindustry))
 			.attr("fill", "#fff")
 		colrects.append("svg:text")
+			.attr("class", "industrytitle")
 			.attr("y", -10)
+			.attr("transform", (d)->
+				"translate(20) rotate(-10)")
 			# .attr("x", (d, i) ->
 			# 	title = titles[i]
 			# 	# titlew = title.length * 12
@@ -332,12 +340,42 @@ Network = ()->
 				nodePosition.get(d.lcid).y
 				)
 			# 点击绘制该点的投资公司或者股东
-			.on('click', (d)->
-				center = {}
-				center.x = nodePosition.get(d.lcid).x
-				center.y = nodePosition.get(d.lcid).y
-				drawInvestment center, d.investment
-				)
+			# .on('click', showDetails)
+			# 当鼠标移动到某个企业点上的时候，使和它相关的企业都要高亮
+			.on('mouseover', showDetails)
+			.on('mouseout', hideDetails)
+	# 高亮有关系的点
+	showDetails = (d, i)->
+		# hideDetails(d, i)
+		nodes.style("stroke-width", (n)->
+			if (neighboring(d, n) ) then 5.0 else 1.0
+		)
+		entnames.style('opacity', (n)->
+			if (neighboring(d, n) ) then 1.0 else 0.0
+		)
+		links.style("stroke-width", (n)->
+			if (n.enttarget is d.lcid or n.entsource is d.lcid) then 5.0 else 1.0
+		)
+		center = {}
+		center.x = nodePosition.get(d.lcid).x
+		center.y = nodePosition.get(d.lcid).y
+		center.r = nodePosition.get(d.lcid).r
+
+		# 将已有的投资关系去掉
+		clearInvestment = d.investment.filter (invest)->
+			!linkedByIndex[invest.entsource + ', ' + invest.enttarget]
+		drawInvestment center, clearInvestment
+
+	hideDetails = (d, i)->
+		d3.select('.investments').remove()
+		nodes.style("stroke-width", 2.0)
+		entnames.style('opacity', 1.0)
+		links.style("stroke-width", 1.0)
+
+	# 给两个点，然后通过linkedByindex来判断是否有关系
+	neighboring = (a, b)->
+		linkedByIndex[a.lcid + ', ' + b.lcid] or linkedByIndex[b.lcid + ', ' + a.lcid] or a.lcid is b.lcid
+
 	appendEntname = ()->
 		entNameGroup = container.append("svg:g")
 			.attr("class", "entnames")
@@ -347,6 +385,7 @@ Network = ()->
 
 		entnames.enter().append('text')
 			.attr("class", 'entnametext')
+			# .attr('opacity', 0)
 			.attr('x', (d)->
 				nodePosition.get(d.lcid).x
 				)
@@ -355,7 +394,9 @@ Network = ()->
 				)
 			.attr('transform', (d)-> 
 					entnamewidth = d.entname.length * 10
-					"translate(#{-nodePosition.get(d.lcid).r - entnamewidth/2}, #{-nodePosition.get(d.lcid).r - 10})")
+					# num = [1, -1][Math.round(Math.random())] * (nodePosition.get(d.lcid).r + 10)
+					# "translate(#{- entnamewidth/2}, #{num})")
+					"translate(#{- entnamewidth/2}, #{-nodePosition.get(d.lcid).r - 10})")
 			.text((d)->
 				d.entname
 				)
@@ -387,8 +428,8 @@ Network = ()->
 					nodePosition.get(d.enttarget).y
 				)
 	drawInvestment = (center, investment)->
-		if d3.select('.investments')
-			d3.select('.investments').remove()
+		# 将其它的投资人移除掉，然后对新的投资人进行绘制
+		d3.select('.investments').remove()
 		# 第一个点的绘制角度
 		startangle = 0
 		# 两个圆之间的夹角
@@ -396,6 +437,7 @@ Network = ()->
 		# 距离点击点的距离
 		radius = 100
 
+		# 计算每个投资点与中心点的相对坐标
 		radialLocation = (center, angle, radius) ->
 		    x = (center.x + radius * Math.cos(angle * Math.PI / 180))
 		    y = (center.y + radius * Math.sin(angle * Math.PI / 180))
@@ -408,16 +450,49 @@ Network = ()->
 		investmentGroup = container.append("svg:g")
 			.attr("class", "investments")
 
-		investmentnodes = investmentGroup.selectAll("circle.investment")
+		investments = investmentGroup.selectAll("g.investment")
 			.data(investment)
 
-		investmentnodes.enter().append("circle")
-			.attr("class", "investmentnode")
-			.attr('r', 10)
-			.attr("cx", (d)-> d.x)
-			.attr("cy", (d)-> d.y)
 
-		# investmentnodes.exit().remove()
+		investments.enter().append("svg:g")
+			.insert('image')
+			.attr("class", "investmentimage")
+			# .attr('r', 10)
+			.attr("width", img_w)
+			.attr("height", img_h)
+			.attr("x", (d)-> d.x - img_w / 2)
+			.attr("y", (d)-> d.y - img_h / 2)
+			.attr("xlink:href", '/img/grayman.png')
+
+		investments.enter().append("svg:g")
+			.insert('text')
+			.attr("class", "investmentname")
+			# .attr('r', 10)
+			.attr("x", (d)-> d.x - d.entpre.length * 10 / 2)
+			.attr("y", (d)-> d.y - img_h / 2 - 10)
+			.text((d)-> d.entpre)
+		# 增加指向箭头
+		investmentGroup.append("defs").append("marker")
+			.attr("id", "arrowhead")
+			.attr("refX", 4)
+			.attr("refY", 2)
+			.attr("markerWidth", 6)
+			.attr("markerHeight", 4)
+			.attr("orient", "auto")
+			.append("path")
+			.attr("d", "M 0,0 V 4 L6,2 Z")
+
+		investments.selectAll("path")
+			.data(investment)
+			.enter()
+			.append("svg:path")
+			.attr("class", "link")
+			.attr("d", (d)-> 
+				"M#{d.x},#{d.y} L#{center.x},#{center.y}"
+			)
+			.attr("marker-end", "url(#arrowhead)")
+
+		investments.exit().remove()
 
 
 	return network

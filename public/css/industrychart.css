@@ -61,3 +61,18 @@ rect.colrect {
   stroke: #ddd;
   stroke-width: 2;
 }
+.industrytitle {
+  font-size: 10px;
+  text-transform: rotate(-10, 0 0);
+}
+.entnametext {
+  font-size: 10px;
+}
+path.link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+.investmentname {
+  font-size: 10px;
+}

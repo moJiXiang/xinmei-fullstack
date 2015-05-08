@@ -1,6 +1,6 @@
 (function() {
   $(function() {
-    var apiBaseUri, bindLoadFuc;
+    var apiBaseUri, bindLoadQyFuc, bingLoadArticleFuc;
     console.log('compile navbar coffee success');
     apiBaseUri = '/v1/api';
     $('#search-btn').click(function() {
@@ -24,7 +24,8 @@
           postTemplate = JST['public/templates/search-results.handlebars'];
           html = postTemplate(result);
           $('#search-list').html(html);
-          return bindLoadFuc();
+          bindLoadQyFuc();
+          return bingLoadArticleFuc();
         },
         complete: function() {
           clearInterval(time);
@@ -38,7 +39,7 @@
     $('#close-search-btn').click(function() {
       return $('.search-result').hide();
     });
-    return bindLoadFuc = function() {
+    bindLoadQyFuc = function() {
       return $('.loaddata-btn').on('click', function() {
         var lcid;
         lcid = $(this).data('lcid');
@@ -77,6 +78,12 @@
             }
           });
         });
+      });
+    };
+    return bingLoadArticleFuc = function() {
+      return $('.loadarticles-btn').on('click', function() {
+        var enterprise;
+        return enterprise = $(this).data('enterprise');
       });
     };
   });

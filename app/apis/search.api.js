@@ -8,3 +8,4 @@ module.exports = function (app) {
 };
 
 router.get('/search', search.listSearchResult);
+router.get('/search/engine', search.listSearchFromEngine)
