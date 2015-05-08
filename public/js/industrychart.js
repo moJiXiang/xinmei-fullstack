@@ -2,7 +2,7 @@
   var Network, industryNetwork, lcid;
 
   Network = function() {
-    var allData, appendChartTitle, appendColRects, appendEntname, appendLinks, appendNodes, appendRowRects, appendXAxis, appendYAxis, biggerH, calculateHeight, color, colrects, colrectsGroup, colswidth, container, deepCompany, deepNum, drawInvestment, entNameGroup, entindustryArr, entnames, height, heightRange, heightValues, hideDetails, img_h, img_w, investmentGroup, investments, linkedByIndex, links, linksGroup, maxRectHeight, maxValue, minRectHeight, minValue, multiple, neighboring, network, nodePosition, nodes, nodesGroup, paddingLeft, paddingTop, paddinginner, place, rectWidthValues, rowrects, rowrectsGroup, setupData, shiftValues, shiftx, shifty, showDetails, titles, width, widthRange, widthValues;
+    var allData, appendChartTitle, appendColRects, appendEntname, appendEntregcap, appendLinks, appendNodes, appendRowRects, appendXAxis, appendYAxis, biggerH, calculateHeight, color, colrects, colrectsGroup, colswidth, container, deepCompany, deepNum, drawInvestment, entNameGroup, entindustryArr, entnames, height, heightRange, heightValues, hideDetails, img_h, img_w, investmentGroup, investments, linkedByIndex, links, linksGroup, maxRectHeight, maxValue, minRectHeight, minValue, multiple, neighboring, network, nodePosition, nodes, nodesGroup, paddingLeft, paddingTop, paddinginner, place, rectWidthValues, rowrects, rowrectsGroup, setupData, shiftValues, shiftx, shifty, showDetails, titles, width, widthRange, widthValues;
     container = null;
     allData = null;
     width = 0;
@@ -65,6 +65,7 @@
       place();
       appendLinks();
       appendNodes();
+      appendEntregcap();
       return appendEntname();
     };
     setupData = function(data) {
@@ -218,7 +219,7 @@
         hmin = heightValues.get(num).min / multiple;
         hmax = heightValues.get(num).max / multiple;
         heightRange.domain([0, hmax]);
-        yAxis = d3.svg.axis().scale(heightRange).orient("left").ticks(5);
+        yAxis = d3.svg.axis().scale(heightRange).orient("left").ticks(3);
         results.push(rowrectsGroup.select('.yaxis' + num).call(yAxis));
       }
       return results;
@@ -294,6 +295,22 @@
     neighboring = function(a, b) {
       return linkedByIndex[a.lcid + ', ' + b.lcid] || linkedByIndex[b.lcid + ', ' + a.lcid] || a.lcid === b.lcid;
     };
+    appendEntregcap = function() {
+      var entregcaps;
+      entNameGroup = container.append('svg:g').attr('class', 'entregcaps');
+      entregcaps = entNameGroup.selectAll("text.entregcap").data(allData.nodes);
+      return entregcaps.enter().append('text').attr("class", 'entregcap').attr('x', function(d) {
+        return nodePosition.get(d.lcid).x;
+      }).attr('y', function(d) {
+        return nodePosition.get(d.lcid).y;
+      }).attr('transform', function(d) {
+        var entregcapwidth;
+        entregcapwidth = d.regcap.toString().length * 5;
+        return "translate(" + (-entregcapwidth / 2) + ", " + (5 / 2) + ")";
+      }).text(function(d) {
+        return d.regcap;
+      }).on('mouseover', showDetails).on('mouseout', hideDetails);
+    };
     appendEntname = function() {
       entNameGroup = container.append("svg:g").attr("class", "entnames");
       entnames = entNameGroup.selectAll("text.entname").data(allData.nodes);
@@ -358,7 +375,13 @@
         return d.x - img_w / 2;
       }).attr("y", function(d) {
         return d.y - img_h / 2;
-      }).attr("xlink:href", '/img/grayman.png');
+      }).attr("xlink:href", function(d) {
+        if (d.entpre.length > 4) {
+          return '/img/enterprise.png';
+        } else {
+          return '/img/grayman.png';
+        }
+      });
       investments.enter().append("svg:g").insert('text').attr("class", "investmentname").attr("x", function(d) {
         return d.x - d.entpre.length * 10 / 2;
       }).attr("y", function(d) {

@@ -92,6 +92,8 @@ Network = ()->
 		place()
 		appendLinks()
 		appendNodes()
+		# 在公司圆圈里面增加企业的投资金额
+		appendEntregcap()
 		appendEntname()
 
 	setupData = (data)->
@@ -291,7 +293,7 @@ Network = ()->
 			yAxis = d3.svg.axis()
 			    .scale(heightRange)
 			    .orient("left")
-			    .ticks(5)
+			    .ticks(3)
 
 			rowrectsGroup.select('.yaxis'+num)
 				.call(yAxis)
@@ -376,6 +378,27 @@ Network = ()->
 	neighboring = (a, b)->
 		linkedByIndex[a.lcid + ', ' + b.lcid] or linkedByIndex[b.lcid + ', ' + a.lcid] or a.lcid is b.lcid
 
+	appendEntregcap = ()->
+		entNameGroup = container.append('svg:g')
+			.attr('class', 'entregcaps')
+
+		entregcaps = entNameGroup.selectAll("text.entregcap")
+			.data(allData.nodes)
+
+		entregcaps.enter().append('text')
+			.attr("class", 'entregcap')
+			.attr('x', (d)->
+				nodePosition.get(d.lcid).x
+			)
+			.attr('y', (d)->
+				nodePosition.get(d.lcid).y
+			)
+			.attr('transform', (d)-> 
+				entregcapwidth = d.regcap.toString().length * 5
+				"translate(#{- entregcapwidth/2}, #{5/2})")
+			.text((d)-> d.regcap)
+			.on('mouseover', showDetails)
+			.on('mouseout', hideDetails)
 	appendEntname = ()->
 		entNameGroup = container.append("svg:g")
 			.attr("class", "entnames")
@@ -462,7 +485,11 @@ Network = ()->
 			.attr("height", img_h)
 			.attr("x", (d)-> d.x - img_w / 2)
 			.attr("y", (d)-> d.y - img_h / 2)
-			.attr("xlink:href", '/img/grayman.png')
+			.attr("xlink:href", (d)->
+				if d.entpre.length > 4
+					'/img/enterprise.png'
+				else
+					'/img/grayman.png')
 
 		investments.enter().append("svg:g")
 			.insert('text')
