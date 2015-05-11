@@ -17,7 +17,8 @@ exports.getEntsRelationWithTree = function(req, res, next) {
   var request_timeout = null;
   request_timeout = setTimeout(function() {
       // request_timeout = null;
-      res.json(new Status.TimeOutError('Request timeout.'));
+      res.status(408).end()
+      // res.json(new Status.TimeOutError('Request timeout.'));
   }, 20000);
   getEnterpriseAndEntrelation(lcid, function(err) {
       // console.log(results);
@@ -40,7 +41,8 @@ exports.getEntsRelationWithChart = function(req, res, next) {
   var request_timeout = null;
   request_timeout = setTimeout(function() {
       // request_timeout = null;
-      res.json(new Status.TimeOutError('Request timeout.'));
+      // res.json(new Status.TimeOutError('Request timeout.'));
+      res.status(408).end()
   }, 20000);
   getEnterpriseAndEntrelation(lcid, function(err) {
       // console.log(results);
