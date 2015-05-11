@@ -159,6 +159,7 @@ var getEnterpriseAndEntrelation = function(lcid, callback) {
           async.each(tasklist, getEnterpriseAndEntrelation, function(err) {
             if(err) {
               console.log('query data failed.');
+              callback(err);
             } else {
               console.log('query data success.')
               // 将数据push到全局数组里面

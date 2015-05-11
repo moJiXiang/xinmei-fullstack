@@ -2,11 +2,13 @@ var mongoose = require('mongoose'),
     Enterprise = mongoose.model('Enterprise'),
     Entsrelation = mongoose.model('Entsrelation'),
     Entprerelation = mongoose.model('Entprerelation'),
+    Searchresult = mongoose.model('Searchresult'),
     Status = require('../helpers/status'),
     request = require('request'),
     async = require('async'),
     _ = require('lodash'),
     zlib = require('zlib'),
+    sleep = require('sleep'),
     cheerio = require('cheerio'),
     Qy = 'http://app.entplus.cn';
 
@@ -121,6 +123,7 @@ var listSearchResultByQy = function (options, cb) {
 	});
 };
 
+// 查询本地数据库的企业
 exports.getEnterpriseLocal = function(lcid, cb) {
 	Enterprise.findOne({lcid: lcid})
 		//parse to js object
@@ -133,7 +136,7 @@ exports.getEnterpriseLocal = function(lcid, cb) {
 			}
 		})
 }
-
+// 查询本地数据库的主要投资企业
 exports.getMaininvestLocal = function(lcid, cb) {
 	Entsrelation.find({entsource: lcid})
 		.lean()
@@ -145,7 +148,7 @@ exports.getMaininvestLocal = function(lcid, cb) {
 			}
 		})
 }
-
+// 查询本地数据库的股东
 exports.getInvestmentLocal = function(lcid, cb) {
 	Entprerelation.find({enttarget: lcid})
 		.lean()
@@ -172,6 +175,7 @@ exports.listSearchFromEngine = function(req, res, next) {
 	}).request();
 }
 
+// 爬虫百度
 var bdsearch = function(options, cb) {
 	options = options || {};
 	this.pn = options.pn || 0
@@ -182,26 +186,48 @@ var bdsearch = function(options, cb) {
 		pn: this.pn
 	};
 	this.config = {
-		base_url: 'https://www.baidu.com',
+		base_url: 'http://www.baidu.com',
 		lang: 'zh-CN'
 	};
 };
 
 bdsearch.prototype.parseResponse = function(body) {
 	var $ = cheerio.load(body);
-	var results = $(body).find('#content_left').find('.result');
+	var results = $(body).find('#content_left').find('.c-container');
 	var arr = [];
 
 	_.forEach(results, function(re) {
 		var obj = {
-			// TODO: 用正则匹配中文
-			title: $(this).find('h3.t>a').html().match(),
-			url: $(this).find('h3.t>a').attr('href'),
-			content: $(this).find('c-abstract').html().match()
+			title: $(re).find('h3.t>a').text(),
+			url: $(re).find('a').attr('href'),
+			content: $(re).find('div.c-abstract').text() || $(re).find('.c-row').text()
 		}
 		arr.push(obj);
 	})
 	return arr;
+}
+
+bdsearch.prototype.nextPage = function(options){
+	var $ = cheerio.load(body);
+	var nextpage = $(body).find('#page').find()
+};
+/**
+ * Save search results to storage
+ * then return to search api
+ */
+bdsearch.prototype.saveToStorage = function(results, callback) {
+
+	Searchresult.create(results, function(err, result) {
+		Searchresult.find()
+			.lean()
+			.exec(function(err, results) {
+				if (err) {
+					callback(err);
+				} else{
+					callback(results);
+				}
+			})
+	});
 }
 
 bdsearch.prototype.request = function () {
@@ -234,16 +260,18 @@ bdsearch.prototype.request = function () {
 	}
 	// console.log(options);
 	request(options, function(err, res, body) {
+		sleep.sleep(1);
 		if (!err && res.statusCode == 200) {
 			var res_encoding = res.headers['content-encoding'];
 			if (res_encoding.indexOf('gzip') >= 0) {
 				zlib.unzip(body, function(err, buffer) {
 					body = buffer.toString();
+					self.saveToStorage(self.parseResponse(body), self.callback);
 					// self.callback(self.parseResponse(body))
-					self.callback(body)
+					// self.callback(body)
 				})
 			} else {
-				self.callback(self.parseResponse(body));
+				self.saveToStorage(self.parseResponse(body), self.callback);
 			}
 		}
 	})

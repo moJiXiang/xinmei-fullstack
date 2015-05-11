@@ -532,7 +532,6 @@ Network = ()->
 			.attr("class", "link")
 			.attr("d", (d)-> 
 				sidecoordinate = radialLocation(center, d.startangle, center.r + 4)
-				console.log(sidecoordinate)
 				"M#{d.x},#{d.y} L#{sidecoordinate.x},#{sidecoordinate.y}"
 			)
 			.attr("marker-end", "url(#arrowhead)")

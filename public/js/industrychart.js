@@ -410,7 +410,6 @@
       investments.selectAll("path").data(investment).enter().append("svg:path").attr("class", "link").attr("d", function(d) {
         var sidecoordinate;
         sidecoordinate = radialLocation(center, d.startangle, center.r + 4);
-        console.log(sidecoordinate);
         return "M" + d.x + "," + d.y + " L" + sidecoordinate.x + "," + sidecoordinate.y;
       }).attr("marker-end", "url(#arrowhead)");
       return investments.exit().remove();
