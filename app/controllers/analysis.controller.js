@@ -18,7 +18,7 @@ exports.getEntsRelationWithTree = function(req, res, next) {
   request_timeout = setTimeout(function() {
       // request_timeout = null;
       res.json(new Status.TimeOutError('Request timeout.'));
-  }, 5000);
+  }, 20000);
   getEnterpriseAndEntrelation(lcid, function(err) {
       // console.log(results);
       if (err) {
@@ -37,12 +37,18 @@ exports.getEntsRelationWithChart = function(req, res, next) {
   global_list = _.drop(global_list, global_list.length);
   console.log(global_list);
   var lcid = req.params.lcid;
+  var request_timeout = null;
+  request_timeout = setTimeout(function() {
+      // request_timeout = null;
+      res.json(new Status.TimeOutError('Request timeout.'));
+  }, 20000);
   getEnterpriseAndEntrelation(lcid, function(err) {
       // console.log(results);
       if (err) {
+          clearTimeout(request_timeout);
           res.json(new Status.NotFoundError('Not found results.'))
       } else {
-        // res.json(new Status.SuccessStatus('Find success.', global_list));
+        clearTimeout(request_timeout);
         res.json(new Status.SuccessStatus('Find success.', parseToChart(lcid, global_list)));
       }
   })
