@@ -11,6 +11,11 @@ var Status = {
 
 		this.data = results;
 
+	},
+	TimeOutError : function(message) {
+		this.meta = {};
+		this.meta.message = message;
+		this.meta.code = 408;
 	}
 }
 

@@ -15,10 +15,17 @@ exports.getEntsRelationWithTree = function(req, res, next) {
   global_list = _.drop(global_list, global_list.length);
   var lcid = req.params.lcid;
   getEnterpriseAndEntrelation(lcid, function(err) {
+      var request_timeout = null;
+      request_timeout = setTimeout(function() {
+          // request_timeout = null;
+          res.json(new Status.TimeOutError('Request timeout.'));
+      }, 5000);
       // console.log(results);
       if (err) {
+          clearTimeout(request_timeout);
           res.json(new Status.NotFoundError('Not found results.'))
       } else {
+        clearTimeout(request_timeout);
         // res.json(new Status.SuccessStatus('Find success.', global_list));
         res.json(new Status.SuccessStatus('Find success.', parseToTreeData(lcid, global_list)));
       }
@@ -82,7 +89,7 @@ var parseToChart = function(lcid, global_list) {
   var deep = 1;
   chartData.nodes = [];
   chartData.links = [];
-  chartData.investments = [];
+  // chartData.investments = [];
   _.forEach(global_list, function(obj, i) {
     if(obj.children && obj.children.length > 0) {
       _.forEach(obj.children, function(child) {
