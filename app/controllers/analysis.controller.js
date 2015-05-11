@@ -14,12 +14,12 @@ exports.getEntsRelationWithTree = function(req, res, next) {
   // 将global_list清空，否则数据会量级增加
   global_list = _.drop(global_list, global_list.length);
   var lcid = req.params.lcid;
+  var request_timeout = null;
+  request_timeout = setTimeout(function() {
+      // request_timeout = null;
+      res.json(new Status.TimeOutError('Request timeout.'));
+  }, 5000);
   getEnterpriseAndEntrelation(lcid, function(err) {
-      var request_timeout = null;
-      request_timeout = setTimeout(function() {
-          // request_timeout = null;
-          res.json(new Status.TimeOutError('Request timeout.'));
-      }, 5000);
       // console.log(results);
       if (err) {
           clearTimeout(request_timeout);
