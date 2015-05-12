@@ -1,0 +1,57 @@
+{{> navbar }}
+
+<div class="container">
+	<div class="page-header" id="entname">
+      <h3>{{results.enterprise.entname}}</h3>
+    </div>
+
+    <table class="table table-hover">
+    	<thead>
+    		<tr>
+    			<th>标题</th>
+    			<th>摘要</th>
+				<th>信源</th>    		
+    			<th>关键词</th>
+    			<th>域名</th>	
+    			<th>百度排名(1-01，10-09)</th>
+    			<th>打分(关键词同时出现在标题：3或者摘要：2，两处出现：4，摘要：1, 全无:0)</th>
+    		</tr>
+    	</thead>
+		<tbody>
+			{{#each results.doc}}
+			<tr>
+				<th><a href="{{url}}">{{title}}</a></th>
+				<th>{{brief}}</th>
+			</tr>
+			{{/each}}
+		</tbody>
+    </table>
+    <nav>
+	  <ul class="pagination">
+	  	{{#compare curpage 0 operator="=="}}
+	  	<li class="disabled">
+	      <a href="#" aria-label="Previous">
+	        <span aria-hidden="true">&laquo;</span>
+	      </a>
+	    </li>
+	  	{{else}}
+	   	<li>
+	      <a href="?offset={{calculate curpage 1 "-"}}" aria-label="Previous">
+	        <span aria-hidden="true">&laquo;</span>
+	      </a>
+	    </li>
+	    {{/compare}}
+	    {{!-- {{calculate results.count 10}} --}}
+	    <li class="active"><a href="?offset={{curpage}}">{{calculate curpage 1 "+"}}</a></li>
+	    <li><a href="?offset={{calculate curpage 1 "+"}}">{{calculate curpage 2 "+"}}</a></li>
+	    <li><a href="?offset={{calculate curpage 2 "+"}}">{{calculate curpage 3 "+"}}</a></li>
+	    <li><a href="?offset={{calculate curpage 3 "+"}}">{{calculate curpage 4 "+"}}</a></li>
+	    <li><a href="?offset={{calculate curpage 4 "+"}}">{{calculate curpage 5 "+"}}</a></li>
+	    <li>
+	      <a href="?offset={{calculate curpage 1 "+"}}" aria-label="Next">
+	        <span aria-hidden="true">&raquo;</span>
+	      </a>
+	    </li>
+	  </ul>
+	</nav>
+</div>

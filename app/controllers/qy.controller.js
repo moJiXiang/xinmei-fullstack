@@ -177,14 +177,14 @@ var initRequestOption = function(criteria, url) {
 	var data = {
 	    appKey: (null),
 	    appVersion: "1.3.3",
-	    imei: "EF0D574C-628C-4334-9DF9-75C2AE7DDBDE",
+	    imei: "D8F479E6-37E5-41EC-8451-BC7DECFC1484",
 	    os: "iPhone OS",
 	    page: 1,
 	    rows: 100,
 	    type: "全部",
 	    osVersion: "8.0.2",
 	    sourceId: (null),
-	    userId: "ff8080814cbc7f6f014cca52197b128a",
+	    userId: "ff8080814cb72494014cb7254ae40000",
 	    ver: (null)
 	};
 	for(key in criteria) {
@@ -198,7 +198,7 @@ var initRequestOption = function(criteria, url) {
 	    'User-Agent': 'Entplus/1.3.3 (iPhone; iOS 8.0.2; Scale/2.00)',
 	    'Accept-Language': 'en;q=1, zh-Hans;q=0.9',
 	    'Accept-Encoding': 'gzip, deflate',
-	    'Cookie': 'JSESSIONID=6E7A6C44444C635CE411B9BAD407D446',
+	    'Cookie': 'JSESSIONID=9B39A310056ABB46CBFEFB53F13A90BD',
 	};
 	var options = {
 	    hostname: 'app.entplus.cn',

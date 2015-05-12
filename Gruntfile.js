@@ -25,7 +25,8 @@ module.exports = function (grunt) {
           'public/css/coverbootstrap.css': 'public/css/coverbootstrap.less',
           'public/css/navbar.css': 'public/css/navbar.less',
           'public/css/enterprisetree.css': 'public/css/enterprisetree.less',
-          'public/css/industrychart.css': 'public/css/industrychart.less'
+          'public/css/industrychart.css': 'public/css/industrychart.less',
+          'public/css/login.css': 'public/css/login.less'
         }
       }
     },

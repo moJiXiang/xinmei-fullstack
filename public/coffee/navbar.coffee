@@ -87,9 +87,62 @@ $ ->
 	
 	# 给每个下载文章信息按钮绑定事件
 	bingLoadArticleFuc = ()->
-		$('.loadarticles-btn').on('click', ()->
+		$('.loaddocs-btn').on('click', ()->
 			enterprise = $(this).data('enterprise')
-			
+			lcid = $(this).data('lcid')
+			wd = null
+			$('#beginsearch-btn').on('click', ()->
+				# 搜素关键词
+				rule = $('input[name=optionsRadios]:checked', '#articledatamodal').val()
+				keyword = $('input[name=optionsRadios]:checked', '#articledatamodal').parent().parent('div.radio').find('.searchval').val()
+				switch rule
+					when 'allmatch' then wd = '"' + "#{enterprise}" + '"'
+					when 'exclude' 
+						string = ''
+						string = string + '-'+kw+' ' for kw in keyword.split(',') 
+						wd = "#{enterprise} #{string}"
+					when 'widematch' then wd = "#{keyword}"
+					when 'intitle' then wd = "intitle:#{enterprise}"
+					when 'allintitle'
+						string = ''
+						string = string + kw+' ' for kw in keyword.split(',') 
+						wd = "allintitle:#{enterprise} #{string}"
+					when 'keywords'
+						string = ''
+						string = string + kw+' ' for kw in keyword.split(',') 
+						wd = "#{enterprise} #{string}"
+				time = null
+				percent = 0
+				$('.loaddata-result').show()
+				$('.loaddata-progress>.progress-bar').attr('style', "width: 0%")
+				$.ajax({
+					type: 'POST',
+					url: "#{apiBaseUri}/spider",
+					data:
+						lcid: lcid,
+						wd: wd
+					,
+					beforeSend: ()->
+						# 用来显示进度条的时间
+						$('.loaddata-progress').show()
+						time = setInterval(()->
+							$('.loaddata-progress>.progress-bar').attr('style', "width: #{percent+=1}%")
+
+						1000)
+					,
+					success: (result)->
+						postTemplate = JST['public/templates/search-doc.handlebars']
+						html = postTemplate({lcid: lcid})
+						$('#search-doc').html(html)
+					,
+					complete: ()->
+						clearInterval(time)
+						$('.loaddata-progress>.progress-bar').attr('style', "width: 100%")
+						setTimeout(()->
+							$('.loaddata-progress').hide()
+						500)
+				})
+			)
 		)
 
 

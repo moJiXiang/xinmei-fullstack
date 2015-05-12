@@ -61,7 +61,7 @@ EnterpriseSchema.statics = {
 		var criteria = options.criteria || {};
 		this.find(criteria)
 			.limit(options.limit || 10)
-			.skip(options.offset || 0)
+			.skip(options.offset * (options.limit || 10) || 0)
 			.exec(cb);
 	}
 }

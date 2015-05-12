@@ -81,9 +81,86 @@
       });
     };
     return bingLoadArticleFuc = function() {
-      return $('.loadarticles-btn').on('click', function() {
-        var enterprise;
-        return enterprise = $(this).data('enterprise');
+      return $('.loaddocs-btn').on('click', function() {
+        var enterprise, lcid, wd;
+        enterprise = $(this).data('enterprise');
+        lcid = $(this).data('lcid');
+        wd = null;
+        return $('#beginsearch-btn').on('click', function() {
+          var i, j, k, keyword, kw, len, len1, len2, percent, ref, ref1, ref2, rule, string, time;
+          rule = $('input[name=optionsRadios]:checked', '#articledatamodal').val();
+          keyword = $('input[name=optionsRadios]:checked', '#articledatamodal').parent().parent('div.radio').find('.searchval').val();
+          switch (rule) {
+            case 'allmatch':
+              wd = '"' + ("" + enterprise) + '"';
+              break;
+            case 'exclude':
+              string = '';
+              ref = keyword.split(',');
+              for (i = 0, len = ref.length; i < len; i++) {
+                kw = ref[i];
+                string = string + '-' + kw + ' ';
+              }
+              wd = enterprise + " " + string;
+              break;
+            case 'widematch':
+              wd = "" + keyword;
+              break;
+            case 'intitle':
+              wd = "intitle:" + enterprise;
+              break;
+            case 'allintitle':
+              string = '';
+              ref1 = keyword.split(',');
+              for (j = 0, len1 = ref1.length; j < len1; j++) {
+                kw = ref1[j];
+                string = string + kw + ' ';
+              }
+              wd = "allintitle:" + enterprise + " " + string;
+              break;
+            case 'keywords':
+              string = '';
+              ref2 = keyword.split(',');
+              for (k = 0, len2 = ref2.length; k < len2; k++) {
+                kw = ref2[k];
+                string = string + kw + ' ';
+              }
+              wd = enterprise + " " + string;
+          }
+          time = null;
+          percent = 0;
+          $('.loaddata-result').show();
+          $('.loaddata-progress>.progress-bar').attr('style', "width: 0%");
+          return $.ajax({
+            type: 'POST',
+            url: apiBaseUri + "/spider",
+            data: {
+              lcid: lcid,
+              wd: wd
+            },
+            beforeSend: function() {
+              $('.loaddata-progress').show();
+              return time = setInterval(function() {
+                return $('.loaddata-progress>.progress-bar').attr('style', "width: " + (percent += 1) + "%");
+              }, 1000);
+            },
+            success: function(result) {
+              var html, postTemplate;
+              postTemplate = JST['public/templates/search-doc.handlebars'];
+              html = postTemplate({
+                lcid: lcid
+              });
+              return $('#search-doc').html(html);
+            },
+            complete: function() {
+              clearInterval(time);
+              $('.loaddata-progress>.progress-bar').attr('style', "width: 100%");
+              return setTimeout(function() {
+                return $('.loaddata-progress').hide();
+              }, 500);
+            }
+          });
+        });
       });
     };
   });

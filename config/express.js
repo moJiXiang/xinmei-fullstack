@@ -9,13 +9,16 @@ var multer = require('multer');
 var compress = require('compression');
 var methodOverride = require('method-override');
 var exphbs  = require('express-handlebars');
+var hbshelpers = require('../app/helpers/hbshelpers');
 
 module.exports = function(app, config) {
-  app.engine('handlebars', exphbs({
-    layoutsDir: config.root + '/app/views/layouts/',
+  var hbs = exphbs.create({
     defaultLayout: 'main',
-    partialsDir: [config.root + '/app/views/partials/']
-  }));
+    layoutsDir: config.root + '/app/views/layouts/',
+    partialsDir: [config.root + '/app/views/partials/', config.root + '/app/views/templates'],
+    helpers: hbshelpers
+  })
+  app.engine('handlebars', hbs.engine);
   app.set('views', config.root + '/app/views');
   app.set('view engine', 'handlebars');
 

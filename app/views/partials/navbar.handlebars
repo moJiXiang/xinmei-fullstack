@@ -16,8 +16,8 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">注册</a></li>
-          <li><a href="#">登录</a></li>
+          <li><a href="/register">注册</a></li>
+          <li><a href="/login">登录</a></li>
         </ul>
 
         <form class="navbar-form navbar-right" role="search">
@@ -83,56 +83,56 @@
         <div class="modal-body">
           <div class="radio">
             <label class="col-sm-3">
-              <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-              完全匹配
+              <input type="radio" name="optionsRadios" id="optionsRadios1" value='allmatch' checked>
+              完全匹配企业名称
             </label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" id="inputdeep" placeholder='例如: "中新恒超实业有限公司"'>
-            </div>
+            {{!-- <div class="col-sm-9">
+              <input type="text" class="form-control searchval" id="inputdeep" placeholder='例如: "中新恒超实业有限公司"'>
+            </div> --}}
           </div>
           <div class="radio">
             <label class="col-sm-3">
-              <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+              <input type="radio" name="optionsRadios" id="optionsRadios2" value="exclude">
               排除
             </label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" id="inputdeep" placeholder="例如: 中新恒超实业有限公司 -招聘">
+              <input type="text" class="form-control searchval" id="inputdeep" placeholder="例如: 中新恒超实业有限公司 -招聘">
             </div>
           </div>
           <div class="radio">
             <label class="col-sm-3">
-              <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+              <input type="radio" name="optionsRadios" id="optionsRadios3" value="widematch">
               通配
             </label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" id="inputdeep" placeholder="例如: 中新*公司">
+              <input type="text" class="form-control searchval" id="inputdeep" placeholder="例如: 中新*公司">
             </div>
           </div>
           <div class="radio">
             <label class="col-sm-3">
-              <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+              <input type="radio" name="optionsRadios" id="optionsRadios4" value="intitle">
               标题包含
             </label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" id="inputdeep" placeholder="例如: intitle:中新恒超实业有限公司">
+              <input type="text" class="form-control searchval" id="inputdeep" placeholder="例如: intitle:中新恒超实业有限公司">
             </div>
           </div>
           <div class="radio">
             <label class="col-sm-3">
-              <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+              <input type="radio" name="optionsRadios" id="optionsRadios5" value="allintitle">
               标题包含多组关键字
             </label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" id="inputdeep" placeholder="例如: allintitle:中新恒超实业有限公司 招聘">
+              <input type="text" class="form-control searchval" id="inputdeep" placeholder="例如: allintitle:中新恒超实业有限公司 招聘">
             </div>
           </div>
           <div class="radio">
             <label class="col-sm-3">
-              <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+              <input type="radio" name="optionsRadios" id="optionsRadios6" value="keywords">
               多组关键字
             </label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" id="inputdeep" placeholder="例如: 中新恒超实业有限公司 招聘">
+              <input type="text" class="form-control searchval" id="inputdeep" placeholder="例如: 中新恒超实业有限公司 招聘">
             </div>
           </div>
 
@@ -141,13 +141,13 @@
               <span class="sr-only">60% Complete</span>
             </div>
           </div>
-          <div id="modal-result">
+          <div id="search-doc">
             
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-          <button type="button" class="btn btn-primary" id="beginload-btn">开始</button>
+          <button type="button" class="btn btn-primary" id="beginsearch-btn">开始</button>
         </div>
       </div>
     </div>

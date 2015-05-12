@@ -7,13 +7,14 @@
       <th>公司名</th>
       <th>有无企+数据</th>
       <th>操作</th>
+      <th>搜索数据</th>
       <th>下载文章数据</th>
     </tr>
   </thead>
   <tbody>
   	{{#each data}}
     <tr>
-      <th scope="row">{{@index}}</th>
+      <td scope="row">{{@index}}</td>
       <td>{{this.lcid}}</td>
       <td>{{this.fei_entname}}</td>
       <td>
@@ -35,7 +36,10 @@
         {{/if}}
       </td>
       <td>
-        <button type="button" class="btn btn-default loadarticles-btn" data-enterprise="{{this.fei_entname}}" data-lcid="{{this.lcid}}" data-status = "{{this.status}}" data-toggle="modal" data-target="#articledatamodal">搜索文章</button>
+        <a href="/searchdoc/{{this.lcid}}">{{this.count}}</a>
+      </td>
+      <td>
+        <button type="button" class="btn btn-default loaddocs-btn" data-enterprise="{{this.fei_entname}}" data-lcid="{{this.lcid}}" data-status = "{{this.status}}" data-toggle="modal" data-target="#articledatamodal">搜索文章</button>
       </td>
     </tr>
     {{/each}}

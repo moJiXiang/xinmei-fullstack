@@ -8,3 +8,10 @@
 .progress {
   display: none;
 }
+#articledatamodal .modal-body {
+  min-height: 300px;
+}
+#articledatamodal .radio {
+  padding-left: 5px;
+  overflow: hidden;
+}
