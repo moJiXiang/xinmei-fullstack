@@ -15,7 +15,7 @@ UserSchema.pre('save', function(next) {
 			if(err) {
 				next(err);
 			} else if (result) {
-				next(new Error("Searchdoc Must be specify!"))
+				next(new Error(result.name + " Must be specify!"))
 			} else {
 				next();
 			}

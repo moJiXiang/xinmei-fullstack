@@ -1,7 +1,7 @@
 $ ->
 	console.log 'compline login.coffee success'
 	apiBaseUri = '/v1/api'
-	domain = 'http://localhost:3000'
+	domain = 'http://117.121.25.124/:3000'
 	# send login post request
 	login = ()->
 		email = $('#inputEmail').val()
