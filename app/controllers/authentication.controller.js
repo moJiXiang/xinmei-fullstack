@@ -24,7 +24,7 @@ authentication = {
 	 	});
 	 	user.save(function(err, result) {
 	 		if (err) {
-		          res.json(new Status.NotFoundError(err))
+		          res.json(new Status.NotFoundError(err.message))
 		      } else {
 		          res.json(new Status.SuccessStatus('Save success.', result));
 		      }
