@@ -213,7 +213,7 @@ var initRequestOption = function(criteria, url) {
 
 exports.loadQyEnterpriseData = function(req, res, next) {
 	// 根公司的id
-	var root = req.body.lcid;
+	var root = req.params.lcid;
 	// var asyncTask = [];
 
 	getEnterAndRelationThenSave(root, function(err) {

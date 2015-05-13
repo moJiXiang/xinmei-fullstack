@@ -15,17 +15,20 @@
       
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-right authentication-list">
           <li><a href="/register">注册</a></li>
           <li><a href="/login">登录</a></li>
         </ul>
-
-        <form class="navbar-form navbar-right" role="search">
+        <ul class="nav navbar-nav navbar-right user-list">
+          <li><a href="#" class="user"></a></li>
+          <li><a href="/logout">退出</a></li>
+        </ul>
+        <div class="navbar-form navbar-right search-field">
           <div class="form-group">
-            <input type="text" id="searchval" class="form-control" placeholder="搜人/搜公司">
+            <input type="text" id="searchval" class="form-control" name="searchval" placeholder="搜人/搜公司">
           </div>
           <button type="button" id="search-btn" class="btn btn-default">搜索</button>
-        </form>
+        </div>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
   </nav>

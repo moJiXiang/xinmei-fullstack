@@ -1,9 +1,20 @@
 (function() {
   $(function() {
-    var apiBaseUri, bindLoadQyFuc, bingLoadArticleFuc;
+    var apiBaseUri, bindLoadArticleFuc, bindLoadQyFuc, bindRefreshFuc, name, sendSearch;
     console.log('compile navbar coffee success');
     apiBaseUri = '/v1/api';
-    $('#search-btn').click(function() {
+    name = $.cookie('xinmei-fullstack-name');
+    if (name) {
+      $('.authentication-list').hide();
+      $('.user-list').show();
+      $('.search-field').show();
+      $('.user-list').find('.user').text(name);
+    } else {
+      $('.authentication-list').show();
+      $('.user-list').hide();
+      $('.search-field').hide();
+    }
+    sendSearch = function() {
       var percent, searchval, time;
       searchval = $('#searchval').val();
       time = null;
@@ -25,7 +36,8 @@
           html = postTemplate(result);
           $('#search-list').html(html);
           bindLoadQyFuc();
-          return bingLoadArticleFuc();
+          bindLoadArticleFuc();
+          return bindRefreshFuc();
         },
         complete: function() {
           clearInterval(time);
@@ -35,6 +47,15 @@
           }, 500);
         }
       });
+    };
+    $('#search-btn').on('click', sendSearch);
+    $(document).on('keypress', function(e) {
+      var activeid, key;
+      key = e.which;
+      activeid = document.activeElement.id;
+      if (key === 13 && activeid === 'searchval') {
+        return sendSearch();
+      }
     });
     $('#close-search-btn').click(function() {
       return $('.search-result').hide();
@@ -52,7 +73,7 @@
           console.log('test');
           return $.ajax({
             type: 'POST',
-            url: apiBaseUri + "/loadqydata",
+            url: apiBaseUri + "/qy/" + lcid + "/loadqydata",
             data: {
               lcid: lcid
             },
@@ -80,7 +101,7 @@
         });
       });
     };
-    return bingLoadArticleFuc = function() {
+    bindLoadArticleFuc = function() {
       return $('.loaddocs-btn').on('click', function() {
         var enterprise, lcid, wd;
         enterprise = $(this).data('enterprise');
@@ -160,6 +181,20 @@
               }, 500);
             }
           });
+        });
+      });
+    };
+    return bindRefreshFuc = function() {
+      return $('#entrefresh-btn').click(function() {
+        var lcid;
+        console.log('----------');
+        lcid = $(this).data('lcid');
+        return $.ajax({
+          method: 'get',
+          url: apiBaseUri + "/qy/" + lcid + "/refresh",
+          success: function(data) {
+            return console.log(data);
+          }
         });
       });
     };

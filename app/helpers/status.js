@@ -16,6 +16,11 @@ var Status = {
 		this.meta = {};
 		this.meta.message = message;
 		this.meta.code = 408;
+	},
+	SystemError : function(message) {
+		this.meta = {};
+		this.meta.message = message;
+		this.meta.code = 303;
 	}
 }
 

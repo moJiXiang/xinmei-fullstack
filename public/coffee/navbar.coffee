@@ -1,8 +1,20 @@
 $ ->
 	console.log 'compile navbar coffee success'
 	apiBaseUri = '/v1/api'
+
+	name = $.cookie('xinmei-fullstack-name')
+	if name
+		$('.authentication-list').hide()
+		$('.user-list').show()
+		$('.search-field').show()
+		$('.user-list').find('.user').text(name)
+	else
+		$('.authentication-list').show()
+		$('.user-list').hide()
+		$('.search-field').hide()
+
 	# 搜索框的ajax请求，包括进度条功能
-	$('#search-btn').click(()->
+	sendSearch = ()->
 		searchval = $('#searchval').val();
 		time = null
 		percent = 0
@@ -25,9 +37,10 @@ $ ->
 				html = postTemplate(result)
 				$('#search-list').html(html)
 				# 给动态的元素添加事件
-				bindLoadQyFuc();
-				bingLoadArticleFuc();
-			,
+				bindLoadQyFuc()
+				bindLoadArticleFuc()
+				bindRefreshFuc()
+			,	
 			complete: ()->
 				clearInterval(time)
 				$('.search-progress>.progress-bar').attr('style', "width: 100%")
@@ -35,6 +48,11 @@ $ ->
 					$('.search-progress').hide()
 				500)
 		})	
+	$('#search-btn').on('click', sendSearch)
+	$(document).on('keypress', (e)->
+		key = e.which
+		activeid = document.activeElement.id
+		if(key is 13 and activeid is 'searchval') then sendSearch()
 	)
 	# 搜索结果框的关闭功能
 	$('#close-search-btn').click(()->
@@ -56,7 +74,7 @@ $ ->
 				console.log 'test'
 				$.ajax({
 					type: 'POST',
-					url: "#{apiBaseUri}/loadqydata",
+					url: "#{apiBaseUri}/qy/#{lcid}/loadqydata",
 					data:
 						lcid: lcid
 					,
@@ -86,7 +104,7 @@ $ ->
 		)
 	
 	# 给每个下载文章信息按钮绑定事件
-	bingLoadArticleFuc = ()->
+	bindLoadArticleFuc = ()->
 		$('.loaddocs-btn').on('click', ()->
 			enterprise = $(this).data('enterprise')
 			lcid = $(this).data('lcid')
@@ -145,7 +163,18 @@ $ ->
 			)
 		)
 
+	bindRefreshFuc = ()->
+		$('#entrefresh-btn').click(()->
+			console.log '----------'
+			lcid = $(this).data('lcid')
+			$.ajax({
+				method: 'get',
+				url : "#{apiBaseUri}/qy/#{lcid}/refresh",
+				success : (data)->
+					console.log data
+			})
 
+		)
 
 
 

@@ -16,5 +16,7 @@ router.get('/qy/:lcid/fzjg', qy.fQyGetFzjg);
 // 从企+上面得到该企业的股东
 router.get('/qy/:lcid/investment', qy.fQyGetInvestMent);
 // 从企+上面请求并下载数据
-router.post('/loadqydata', qy.loadQyEnterpriseData);
+router.post('/qy/:lcid/loadqydata', qy.loadQyEnterpriseData);
+// 更新数据
+router.get('/qy/:lcid/refresh', qy.loadQyEnterpriseData);
 

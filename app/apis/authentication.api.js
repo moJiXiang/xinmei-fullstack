@@ -10,3 +10,4 @@ module.exports = function (app) {
 };
 
 router.post('/authentication/regist', authentication.regist);
+router.post('/authentication/login', authentication.login);

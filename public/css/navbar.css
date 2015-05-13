@@ -8,6 +8,12 @@
 .progress {
   display: none;
 }
+.user-list {
+  display: none;
+}
+.search-field {
+  display: none;
+}
 #articledatamodal .modal-body {
   min-height: 300px;
 }

@@ -21,12 +21,12 @@ module.exports = function (grunt) {
     less: {
       dist: {
         files: {
-          'public/css/style.css': 'public/css/style.less',
-          'public/css/coverbootstrap.css': 'public/css/coverbootstrap.less',
-          'public/css/navbar.css': 'public/css/navbar.less',
-          'public/css/enterprisetree.css': 'public/css/enterprisetree.less',
-          'public/css/industrychart.css': 'public/css/industrychart.less',
-          'public/css/login.css': 'public/css/login.less'
+          'public/css/style.css': 'public/less/style.less',
+          'public/css/coverbootstrap.css': 'public/less/coverbootstrap.less',
+          'public/css/navbar.css': 'public/less/navbar.less',
+          'public/css/enterprisetree.css': 'public/less/enterprisetree.less',
+          'public/css/industrychart.css': 'public/less/industrychart.less',
+          'public/css/authentication.css': 'public/less/authentication.less'
         }
       }
     },
@@ -43,10 +43,13 @@ module.exports = function (grunt) {
     coffee : {
       compile: {
         files: {
+          'public/js/config.js' : 'public/coffee/config.coffee',
           'public/js/index.js' : 'public/coffee/index.coffee',
           'public/js/navbar.js' : 'public/coffee/navbar.coffee',
           'public/js/enterprisetree.js' : 'public/coffee/enterprisetree.coffee',
-          'public/js/industrychart.js' : 'public/coffee/industrychart.coffee'
+          'public/js/industrychart.js' : 'public/coffee/industrychart.coffee',
+          'public/js/regist.js' : 'public/coffee/regist.coffee',
+          'public/js/login.js' : 'public/coffee/login.coffee'
         }
       }
     },

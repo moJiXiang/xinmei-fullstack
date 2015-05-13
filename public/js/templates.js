@@ -83,7 +83,9 @@ this["JST"]["public/templates/search-results.handlebars"] = Handlebars.template(
     + alias3(((helper = (helper = helpers.lcid || (depth0 != null ? depth0.lcid : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"lcid","hash":{},"data":data}) : helper)))
     + "/enterprisetree\" role=\"button\">查看树状图</a>     	\n        	<a class=\"btn btn-default\" href=\"/enterprise/"
     + alias3(((helper = (helper = helpers.lcid || (depth0 != null ? depth0.lcid : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"lcid","hash":{},"data":data}) : helper)))
-    + "/industrychart\" role=\"button\">查看行业结构图</a>\n\n";
+    + "/industrychart\" role=\"button\">查看行业结构图</a>\n          <button class=\"btn btn-default\" id=\"entrefresh-btn\" data-lcid = \""
+    + alias3(((helper = (helper = helpers.lcid || (depth0 != null ? depth0.lcid : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"lcid","hash":{},"data":data}) : helper)))
+    + "\" role=\"button\">更新数据</button>\n";
 },"9":function(depth0,helpers,partials,data) {
     var alias1=this.lambda, alias2=this.escapeExpression;
 
