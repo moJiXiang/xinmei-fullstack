@@ -162,7 +162,7 @@
       });
     };
     appendChartTitle = function() {
-      return container.append("svg:text").attr("text-anchor", "middle").attr("x", width / 2).attr("y", paddingTop).text("投资图");
+      return container.append("svg:text").attr("text-anchor", "middle").attr("x", width / 2).attr("y", paddingTop).text("行业投资图");
     };
     appendColRects = function() {
       colrectsGroup = container.append("svg:g").attr("class", "colrects");

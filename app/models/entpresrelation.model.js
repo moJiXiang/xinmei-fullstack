@@ -18,4 +18,25 @@ var EntprerelationSchema = new Schema({
 	entname: String,
 });
 
+EntprerelationSchema.pre('save', function(next) {
+	var self = this;
+	mongoose.model('Entprerelation').findOne({entpre: this.entpre, enttarget: this.enttarget})
+		.exec(function(err, result) {
+			if(err) {
+				next(err);
+			} else if (result) {
+		 		// next(new Error(result.entpre + " Entprerelation Must specify!"));
+				mongoose.model('Entprerelation').remove({entpre: self.entpre, enttarget: self.enttarget})
+					.exec(function(err, result) {
+						if (err) {
+							next(err);
+						} else {
+							next();
+						}
+					})
+			} else {
+				next();
+			}
+		})
+})
 mongoose.model('Entprerelation', EntprerelationSchema);

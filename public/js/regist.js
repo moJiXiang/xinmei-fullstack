@@ -3,7 +3,7 @@
     var apiBaseUri, domain, regist;
     console.log('compile authentication coffee success');
     apiBaseUri = '/v1/api';
-    domain = 'http://localhost:3000';
+    domain = 'http://117.121.25.124:3000';
     regist = function() {
       var email, name, pass, repass;
       name = $('#inputName').val();

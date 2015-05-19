@@ -43,8 +43,16 @@ EnterpriseSchema.pre('save', function(next) {
 		 	if(err) {
 		 		next(err);
 		 	} else if(result) {
-		 		// console.log(result.entname + ' has been saved!')
-		 		next(new Error(result.entname + " Enterprise Must specify!"));
+		 		// // console.log(result.entname + ' has been saved!')
+		 		// next(new Error(result.entname + " Enterprise Must specify!"));
+		 		mongoose.model('Enterprise').remove({lcid: self.lcid})
+		 			.exec(function(err, result) {
+		 				if(err) {
+		 					next(err);
+		 				} else {
+		 					next()
+		 				}
+		 			})
 		 	} else {
 		 		next();
 		 	}

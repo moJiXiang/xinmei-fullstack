@@ -181,7 +181,7 @@ Network = ()->
 			.attr("text-anchor", "middle")
 			.attr("x", width / 2)
 			.attr("y", paddingTop)
-			.text("投资图")
+			.text("行业投资图")
 
 	appendColRects = ()->
 

@@ -23,7 +23,15 @@ EntsrelationSchema.pre('save', function(next) {
 		 		next(err);
 		 	} else if(result) {
 		 		// console.log(result.entname + ' Entsrelation has been saved!')
-		 		next(new Error(result.entname + " Entsrelation Must specify!"));
+		 		// next(new Error(result.entname + " Entsrelation Must specify!"));
+		 		mongoose.model('Entsrelation').remove({entsource: self.entsource, enttarget: self.enttarget})
+		 			.exec(function(err, result) {
+		 				if (err) {
+		 					next(err);
+		 				} else {
+		 					next();
+		 				}
+		 			})
 		 	} else {
 		 		next();
 		 	}
