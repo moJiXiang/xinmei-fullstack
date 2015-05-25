@@ -16,10 +16,9 @@ var SearchwordSchema = new Schema({
   keyword: String, // 关键词
   word: String, // 补充关键词团
   kw: String,
-  status: {type: Number, default: 0},
-  isbdsearched: {type: Boolean, default: false},
-  isglsearched: {type: Boolean, default: false},
-  issgsearched: {type: Boolean, default: false}
+  isbdsearched: {type: Number, default: 0},
+  isglsearched: {type: Number, default: 0},
+  issgsearched: {type: Number, default: 0}
 });
 
 SearchwordSchema.pre('save', function(next) {
