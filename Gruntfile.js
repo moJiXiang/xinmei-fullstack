@@ -26,7 +26,9 @@ module.exports = function (grunt) {
           'public/css/navbar.css': 'public/less/navbar.less',
           'public/css/enterprisetree.css': 'public/less/enterprisetree.less',
           'public/css/industrychart.css': 'public/less/industrychart.less',
-          'public/css/authentication.css': 'public/less/authentication.less'
+          'public/css/authentication.css': 'public/less/authentication.less',
+          'public/css/wordsmanage.css': 'public/less/wordsmanage.less',
+          'public/css/searchwords.css': 'public/less/searchwords.less'
         }
       }
     },
@@ -49,7 +51,9 @@ module.exports = function (grunt) {
           'public/js/enterprisetree.js' : 'public/coffee/enterprisetree.coffee',
           'public/js/industrychart.js' : 'public/coffee/industrychart.coffee',
           'public/js/regist.js' : 'public/coffee/regist.coffee',
-          'public/js/login.js' : 'public/coffee/login.coffee'
+          'public/js/login.js' : 'public/coffee/login.coffee',
+          'public/js/wordsmanage.js' : 'public/coffee/wordsmanage.coffee',
+          'public/js/searchwordsmanage.js' : 'public/coffee/searchwordsmanage.coffee'
         }
       }
     },

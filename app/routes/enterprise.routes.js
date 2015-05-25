@@ -25,3 +25,8 @@ router.get('/:lcid/industrychart', function(req, res, next) {
   var lcid = req.params.lcid;
   res.render('industrychart', {lcid: lcid});
 })
+
+router.get('/:lcid/addkeywords', function(req, res, next) {
+  var lcid = req.params.lcid;
+  res.render('keywords', {lcid: lcid})
+})

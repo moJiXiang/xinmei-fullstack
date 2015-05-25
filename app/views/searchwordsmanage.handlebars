@@ -1,0 +1,38 @@
+{{> navbar }}
+
+<div class="container searchwords-container">
+	<div class="col-lg-4">
+		<div class="keywords">
+			
+			<div class="input-group">
+				<div class="input-group">
+			  		<input type="text" id="main" class="form-control mainimput" placeholder="例如：中新恒超">
+				  <div class="input-group-btn mainselect">
+					<select class="form-control" id="typechange">
+						<option value="entname">公司</option>
+						<option value="corporation">法人</option>
+					</select>
+				  </div>
+				</div>
+				<select class="form-control" id="keyword"></select>
+				<select class="form-control" id="word">
+					<option value="">空</option>
+				</select>
+			  	<button class="btn btn-default addkeyword-btn" id="addsearchword-btn">增加搜索组合</button>
+			</div>
+				<input type="text" class="form-control" disabled value="指定信源">
+			
+		</div>
+	</div>
+	<div class="col-lg-8">
+		<ul class="list-group">
+			{{#each results}}
+			  <li class="list-group-item">
+			    	{{this.main}},{{this.keyword}},{{this.word}}
+			  </li>
+		  	{{/each}}
+		</ul>
+	</div>
+</div>
+
+<script src="/js/searchwordsmanage.js"></script>

@@ -1,0 +1,10 @@
+.wordsmanage-container {
+  margin-top: 20px;
+}
+.addkeyword-btn {
+  margin-bottom: 20px;
+}
+.words-window {
+  height: 800px;
+  overflow: auto;
+}

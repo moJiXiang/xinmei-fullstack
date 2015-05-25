@@ -1,0 +1,48 @@
+{{> navbar }}
+
+<div class="container wordsmanage-container">
+	<div class="col-lg-4">
+		<div class="keywords">
+			
+			<div class="input-group">
+			  <input type="text" id="kw" class="form-control" placeholder="例如：中新恒超">
+			  <div class="input-group-btn">
+			  	<button class="btn btn-default addkeyword-btn" id="addkeyword-btn">增加关键词</button>
+			  </div>
+			</div>
+			<ul class="list-group">
+				{{#each results}}
+				  <li class="list-group-item">
+				    	{{this.keyword}}
+				  </li>
+			  	{{/each}}
+			</ul>
+		</div>
+	</div>
+	<div class="col-lg-8">
+		<div class="words-window">
+			{{#each results}}
+				<div class="words-contain" data-kw={{this.keyword}}>
+					<h4>{{this.keyword}}</h4>
+					<div class="input-group">
+					  <input type="text" class="words form-control" placeholder="例如：中新恒超">
+					  <div class="input-group-btn">
+					  	<button class="btn btn-default addwords-btn" data-kw = {{this.keyword}}>增加关键词</button>
+					  </div>
+					</div>
+					{{#each this.words}}
+					<div class="input-group">
+					  <input type="text" id="kw" class="form-control" value="{{this}}">
+					  <div class="input-group-btn">
+					  	<button class="btn btn-default delword-btn" data-word="{{this}}">删除</button>
+					  	<button class="btn btn-default modifyword-btn">修改</button>
+					  </div>
+					</div>
+					{{/each}}
+				</div>
+			{{/each}}
+		</div>
+	</div>
+</div>
+
+<script src="/js/wordsmanage.js"></script>

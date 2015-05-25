@@ -18,6 +18,7 @@ var mongoose = require('mongoose'),
  * @param {Number} regcap 注册资金 (regist captial)
  * @param {String} regcapcur 人民币还是美元
  * @param {String} esdate 成立时间 (establish date)
+
  */
 var EnterpriseSchema = new Schema({
 	lcid: String,
