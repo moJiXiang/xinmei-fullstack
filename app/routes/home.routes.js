@@ -51,7 +51,6 @@ router.get('/searchwordsmanage', function(req, res, next) {
             var keyword = '"'+word.main+' '+word.keyword+' '+word.word+'"'
             XinmeispidersItem.count({kw: keyword}, function(err, num){
               var obj = {}
-              console.log(keyword) 
               obj.kw = keyword
               obj.num = num
               cb(null, obj)
@@ -61,7 +60,6 @@ router.get('/searchwordsmanage', function(req, res, next) {
           })
         }
       ], function(err, results) {
-          console.log(results);
           res.render('searchwordsmanage', {results: results});
         
       })

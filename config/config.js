@@ -1,7 +1,7 @@
 var path = require('path'),
     rootPath = path.normalize(__dirname + '/..'),
     env = process.env.NODE_ENV || 'development';
-console.log(env);
+console.log(process.env.NODE_ENV);
 var config = {
   development: {
     root: rootPath,
@@ -11,10 +11,8 @@ var config = {
     domain: 'http://127.0.0.1',
     apiBaseUri: '/v1/api',
     port: 3000,
-    // db: 'mongodb://localhost/xinmei-development',
-    db: 'mongodb://xinmei:xinmei@localhost/xinmei-development',
+    db: 'mongodb://localhost/xinmei-development',
     db2: 'mongodb://dbs:SeeFaItH4120#@119.254.108.220:7530/stock'
-    // db: 'mongodb://192.168.14.126:27017/Xinmei'
   },
 
   test: {
@@ -36,7 +34,8 @@ var config = {
     domain: 'http://127.0.0.1',
     apiBaseUri: '/v1/api',
     port: 3000,
-    db: 'mongodb://localhost/xinmei-production'
+    db: 'mongodb://xinmei:xinmei@localhost/xinmei-development',
+    db2: 'mongodb://dbs:SeeFaItH4120#@119.254.108.220:7530/stock'
   }
 };
 

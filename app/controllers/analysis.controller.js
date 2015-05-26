@@ -36,7 +36,6 @@ exports.getEntsRelationWithTree = function(req, res, next) {
 // 获取行业结构图接口
 exports.getEntsRelationWithChart = function(req, res, next) {
   global_list = _.drop(global_list, global_list.length);
-  console.log(global_list);
   var lcid = req.params.lcid;
   var request_timeout = null;
   request_timeout = setTimeout(function() {
@@ -86,7 +85,8 @@ var parseToTreeData = function(lcid, global_list) {
       traversalTreeData(treedata.children)
     }
   })
-    
+  // 清除内存，防止泄漏
+  global_list = _.drop(global_list, global_list.length);
 
   return treedata;
 }
@@ -143,7 +143,7 @@ var parseToChart = function(lcid, global_list) {
     //   })
     // }
   })
-
+  global_list = _.drop(global_list, global_list.length);
   return chartData;
 }
 // 查询企业的详细信息和它的投资关联企业

@@ -20,7 +20,7 @@
 				</select>
 			  	<button class="btn btn-default addkeyword-btn" id="addsearchword-btn">增加搜索组合</button>
 			</div>
-				<input type="text" class="form-control" disabled value="指定信源">
+				{{!-- <input type="text" class="form-control" disabled value="指定信源"> --}}
 			
 		</div>
 	</div>
@@ -28,7 +28,7 @@
 		<ul class="list-group" id="searchwords-list">
 			{{#each results}}
 			  <li class="list-group-item">
-			  <a href="?searchword={{this.kw}}">{{this.kw}}<span class="badge">{{this.num}}</span></a>
+			  <a href="?searchword={{this.kw}}">{{this.kw}}<span class="badge pull-right">{{this.num}}</span></a>
 			  </li>
 		  	{{/each}}
 		</ul>
