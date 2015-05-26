@@ -87,7 +87,9 @@
           word: word
         },
         success: function(result) {
-          return console.log(result);
+          var searchwords;
+          searchwords = result.data;
+          return $('#searchwords-list').append("<li class='list-group-item'>" + searchwords.main + "," + searchwords.keyword + "," + searchwords.word + "</li>");
         }
       });
     });

@@ -66,7 +66,8 @@ $ ->
 				word: word
 			,
 			success: (result)->
-				console.log result
+				searchwords = result.data
+				$('#searchwords-list').append("<li class='list-group-item'>#{searchwords.main},#{searchwords.keyword},#{searchwords.word}</li>")
 		})
 	)
 	

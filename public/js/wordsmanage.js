@@ -14,7 +14,7 @@
         url: apiBaseUri + "/savekw",
         success: function(data) {
           console.log(data);
-          return $('.list-group').append('<li class="list-group-item">' + data.data.keyword + '</li>');
+          return $('.list-group').append("<li class='list-group-item'>" + data.data.keyword + "</li>");
         }
       });
     });

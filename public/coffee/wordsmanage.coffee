@@ -12,7 +12,7 @@ $ ->
 			url: "#{apiBaseUri}/savekw",
 			success: (data)->
 				console.log data
-				$('.list-group').append('<li class="list-group-item">'+data.data.keyword+'</li>')
+				$('.list-group').append("<li class='list-group-item'>#{data.data.keyword}</li>")
 		})
 	)
 

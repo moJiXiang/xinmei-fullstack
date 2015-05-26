@@ -5,7 +5,7 @@
 		<div class="keywords">
 			
 			<div class="input-group">
-			  <input type="text" id="kw" class="form-control" placeholder="例如：中新恒超">
+			  <input type="text" id="kw" class="form-control" placeholder="例如：招聘">
 			  <div class="input-group-btn">
 			  	<button class="btn btn-default addkeyword-btn" id="addkeyword-btn">增加关键词</button>
 			  </div>
@@ -25,9 +25,9 @@
 				<div class="words-contain" data-kw={{this.keyword}}>
 					<h4>{{this.keyword}}</h4>
 					<div class="input-group">
-					  <input type="text" class="words form-control" placeholder="例如：中新恒超">
+					  <input type="text" class="words form-control" placeholder="需用'|'隔开，招聘|用工">
 					  <div class="input-group-btn">
-					  	<button class="btn btn-default addwords-btn" data-kw = {{this.keyword}}>增加关键词</button>
+					  	<button class="btn btn-default addwords-btn" data-kw = {{this.keyword}}>增加词团</button>
 					  </div>
 					</div>
 					{{#each this.words}}
@@ -35,7 +35,6 @@
 					  <input type="text" id="kw" class="form-control" value="{{this}}">
 					  <div class="input-group-btn">
 					  	<button class="btn btn-default delword-btn" data-word="{{this}}">删除</button>
-					  	<button class="btn btn-default modifyword-btn">修改</button>
 					  </div>
 					</div>
 					{{/each}}

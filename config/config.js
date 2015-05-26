@@ -11,7 +11,8 @@ var config = {
     domain: 'http://127.0.0.1',
     apiBaseUri: '/v1/api',
     port: 3000,
-    db: 'mongodb://xinmei:xinmei@localhost/xinmei-development'
+    db: 'mongodb://localhost/xinmei-development'
+    // db: 'mongodb://xinmei:xinmei@localhost/xinmei-development'
     // db: 'mongodb://192.168.14.126:27017/Xinmei'
   },
 
