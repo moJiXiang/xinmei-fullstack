@@ -89,7 +89,7 @@
         success: function(result) {
           var searchwords;
           searchwords = result.data;
-          return $('#searchwords-list').append("<li class='list-group-item'>" + searchwords.main + "," + searchwords.keyword + "," + searchwords.word + "</li>");
+          return $('#searchwords-list').append('<li class="list-group-item">"' + searchwords.main + ' ' + searchwords.keyword + ' ' + searchwords.word + '"</li>');
         }
       });
     });

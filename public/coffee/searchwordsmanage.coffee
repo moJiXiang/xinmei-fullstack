@@ -67,7 +67,7 @@ $ ->
 			,
 			success: (result)->
 				searchwords = result.data
-				$('#searchwords-list').append("<li class='list-group-item'>#{searchwords.main},#{searchwords.keyword},#{searchwords.word}</li>")
+				$('#searchwords-list').append('<li class="list-group-item">"'+searchwords.main+' '+searchwords.keyword+' '+searchwords.word+'"</li>')
 		})
 	)
 	

@@ -4,12 +4,11 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
 var SearchdocSchema = new Schema({
-  lcid: String,
+  kw: String,
   title: String,
   url: String,
   brief: String,
-  from: Number, // 1 :baidu, 2: google, 3: sogou
-  type: Number // 1: sougou公众号, 2:sogou文章
+  domain: String, // 1 :baidu, 2: google, 3: sogou
 });
 
 // 在保存数据之前先检查是否存在，防治重复保存

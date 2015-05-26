@@ -28,7 +28,7 @@
 		<ul class="list-group" id="searchwords-list">
 			{{#each results}}
 			  <li class="list-group-item">
-			    	{{this.main}},{{this.keyword}},{{this.word}}
+			  <a href="?searchword={{this.kw}}">{{this.kw}}<span class="badge">{{this.num}}</span></a>
 			  </li>
 		  	{{/each}}
 		</ul>
