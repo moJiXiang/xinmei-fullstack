@@ -58,12 +58,15 @@ exports.getEntsRelationWithChart = function(req, res, next) {
 // 将数据转化为树状图所需的结构
 var parseToTreeData = function(lcid, global_list) {
   var treedata = {};
+  // var tree_entlcid = []
   // console.log(global_list);
   // 遍历每个节点的children，并且递归调用
   var traversalTreeData = function(children) {
     _.forEach(global_list, function(obj, i) {
       _.forEach(children, function(child) {
-        if(obj.parent && obj.parent.lcid == child.enttarget) {
+        // tree_entlcid.push(obj.parent.lcid)
+        // 判断是否相互投资 parent.lcid = child.enttartget
+        if(obj.parent && obj.parent.lcid == child.enttarget && lcid !== child.enttarget) {
           for(key in obj.parent) {
             child[key] = obj.parent[key];
           }
@@ -81,6 +84,7 @@ var parseToTreeData = function(lcid, global_list) {
       for(key in obj.parent) {
         treedata[key] = obj.parent[key];
       }
+      // tree_entlcid.push(lcid)
       treedata.children = _.cloneDeep(obj.children);
       traversalTreeData(treedata.children)
     }
@@ -115,7 +119,7 @@ var parseToChart = function(lcid, global_list) {
   var addDeep = function(children) {
     _.forEach(global_list, function(node) {
       _.forEach(children, function(child) {
-        if (node.parent && node.parent.lcid == child.enttarget) {
+        if (node.parent && node.parent.lcid == child.enttarget && lcid !== child.enttarget) {
           var prenode = _.first(_.filter(chartData.nodes, function(node) {
             return node.lcid == child.entsource;
           }))
@@ -146,12 +150,16 @@ var parseToChart = function(lcid, global_list) {
   global_list = _.drop(global_list, global_list.length);
   return chartData;
 }
+var global_entlcid = []
 // 查询企业的详细信息和它的投资关联企业
 var getEnterpriseAndEntrelation = function(lcid, callback) {
   // 将tasklist清空
   tasklist = _.drop(tasklist, tasklist.length);
   async.parallel({
       parent: function(cb) {
+        if(global_entlcid.indexOf(lcid) < 0) {
+          global_entlcid.push(lcid);
+        }
         search.getEnterpriseLocal(lcid, cb);
       },
       children: function(cb) {
@@ -170,6 +178,11 @@ var getEnterpriseAndEntrelation = function(lcid, callback) {
           tasklist = _.map(results.children, function(ent) {
             return ent.enttarget;
           })
+          for (var i = 0; i < global_entlcid.length; i++) {
+            if(tasklist.indexOf(global_entlcid[i]) > 0) {
+              tasklist = _.without(tasklist, global_entlcid[i])
+            }
+          };
           // 递归查询并且保存,直到没有关系公司为止  
           async.each(tasklist, getEnterpriseAndEntrelation, function(err) {
             if(err) {
