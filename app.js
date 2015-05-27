@@ -31,10 +31,10 @@ models.forEach(function (model) {
 // 	});
 // } else{
 	
-	var app = express();
+var app = express();
 
-	require('./config/express')(app, config);
+require('./config/express')(app, config);
 
-	app.listen(config.port);
-	// console.log('App is running and Worker ' + cluster.worker.id + ' running!');
+app.listen(config.port);
+// console.log('App is running and Worker ' + cluster.worker.id + ' running!');
 // }

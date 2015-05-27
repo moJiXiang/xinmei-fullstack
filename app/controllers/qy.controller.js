@@ -8,7 +8,7 @@ var mongoose = require('mongoose'),
     async = require('async'),
     sleep = require('sleep'),
     _ = require('lodash'),
-    cluster = require('cluster'),
+    cp = require('child_process'),
     search = require('./search.controller'),
     Qy = 'http://app.entplus.cn',
     second = 1;
@@ -216,22 +216,15 @@ var initRequestOption = function(criteria, url) {
 		// 根公司的id
 		var root = req.params.lcid;
 		// var asyncTask = [];
-
+		console.log(cluster.isMaster);
 		//将cpu 密集型的查询放到工作线程中
-		if (cluster.isMaster) {
-
-			cluster.fork();
-
-		} else {
-			console.log('============' + cluster.worker.id + '=============');
-			getEnterAndRelationThenSave(root, function(err) {
-				if (err) {
-					res.json(new Status.NotFoundError(err.message))
-				} else {
-					res.json(new Status.SuccessStatus('Load Data success.'));
-				}
-			})
-		}
+		getEnterAndRelationThenSave(root, function(err) {
+			if (err) {
+				res.json(new Status.NotFoundError(err.message))
+			} else {
+				res.json(new Status.SuccessStatus('Load Data success.'));
+			}
+		})
 	}
 	var getEnterAndRelationThenSave = function(lcid, callback) {
 		async.parallel([
