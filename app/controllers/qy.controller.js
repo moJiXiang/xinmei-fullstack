@@ -8,6 +8,7 @@ var mongoose = require('mongoose'),
     async = require('async'),
     sleep = require('sleep'),
     _ = require('lodash'),
+    cluster = require('cluster'),
     search = require('./search.controller'),
     Qy = 'http://app.entplus.cn',
     second = 1;
@@ -211,223 +212,232 @@ var initRequestOption = function(criteria, url) {
 	return options;
 }
 
-exports.loadQyEnterpriseData = function(req, res, next) {
-	// 根公司的id
-	var root = req.params.lcid;
-	// var asyncTask = [];
+	exports.loadQyEnterpriseData = function(req, res, next) {
+		// 根公司的id
+		var root = req.params.lcid;
+		// var asyncTask = [];
 
-	getEnterAndRelationThenSave(root, function(err) {
-		if (err) {
-			res.json(new Status.NotFoundError(err.message))
-		} else {
-			res.json(new Status.SuccessStatus('Load Data success.'));
-		}
-	})
-}
-var getEnterAndRelationThenSave = function(lcid, callback) {
-	async.parallel([
-		function(cb) {
-			getEnterpriseAndSave(lcid, cb);
-		},
-		function(cb) {
-			getEntsRelationAndSave(lcid, cb);
-		},
-		function(cb) {
-			getEntpreRelationAndSave(lcid, cb);
-		}
-	], function(err, results) {
-		if(err) {
-			callback(err);
-		} else {
-			// 递归查询并且保存,直到没有关系公司为止	
-			
-			async.waterfall([
-				function(cb) {
-					search.getMaininvestLocal(lcid, function(err, results) {
-						if(err) {
-							cb(err);
-						} else{
-							
-							var tasklist = _.map(results, function(result) {
-								return result.enttarget;
-							})
-							cb(null, tasklist);
-						}
-					});
-				},
-				function(tasklist, cb) {
+		//将cpu 密集型的查询放到工作线程中
+		if (cluster.isMaster) {
 
-					async.each(tasklist, getEnterAndRelationThenSave, function(err) {
-						if (err) {
-							cb(err);
-						} else {
-							cb(null);
-						}
-					})
-				}
-			], function(err, results) {
+			cluster.fork();
+
+		} else {
+			console.log('============' + cluster.worker.id + '=============');
+			getEnterAndRelationThenSave(root, function(err) {
 				if (err) {
-					callback(err);
+					res.json(new Status.NotFoundError(err.message))
 				} else {
-					callback(null);
+					res.json(new Status.SuccessStatus('Load Data success.'));
 				}
 			})
 		}
-	})
-}
-/**
- * 得到一个公司的具体信息并保存到数据库中
- * @param  {String}   lcid     公司的企+id
- * @return {Object}            返回保存后的信息
- */
-var getEnterpriseAndSave = function(lcid, callback) {
-	async.waterfall([
-		function(cb) {
-			getEnterprise(lcid, function(err, result) {
-				if(err) {
-					cb(err);
-				} else {
-					console.log(result.fei_entname);
-					cb(null, result);
-				}
-			})
-		},
-		function(enterprise, cb) {
-			saveEnterprise(enterprise, function(err, result) {
-				if(err) {
-					cb(err);
-				} else {
-					cb(null, result);
-				}
-			})
-		}
-	], 
-	function(err, result) {
-		if(err) {
-			callback(err);
-		} else {
-			callback(null, result);
-		}
-	})
-}
+	}
+	var getEnterAndRelationThenSave = function(lcid, callback) {
+		async.parallel([
+			function(cb) {
+				getEnterpriseAndSave(lcid, cb);
+			},
+			function(cb) {
+				getEntsRelationAndSave(lcid, cb);
+			},
+			function(cb) {
+				getEntpreRelationAndSave(lcid, cb);
+			}
+		], function(err, results) {
+			if(err) {
+				callback(err);
+			} else {
+				// 递归查询并且保存,直到没有关系公司为止	
+				
+				async.waterfall([
+					function(cb) {
+						search.getMaininvestLocal(lcid, function(err, results) {
+							if(err) {
+								cb(err);
+							} else{
+								
+								var tasklist = _.map(results, function(result) {
+									return result.enttarget;
+								})
+								cb(null, tasklist);
+							}
+						});
+					},
+					function(tasklist, cb) {
 
-var saveEnterprise = function(enterprise, callback) {
-	var one = new Enterprise();
-
-	one.lcid = enterprise.lcid;
-	one.entname = enterprise.fei_entname;
-	one.address = enterprise.fei_oploc;
-	one.regno = enterprise.fei_regno;
-	one.corporation = enterprise.epp_name;
-	one.entindustry = enterprise.fei_industryphyname;
-	one.enttype = enterprise.fei_enttypename;
-	one.entstatus = enterprise.fei_entstatusname;
-	one.regorg = enterprise.fei_regorgname;
-	one.regcap = enterprise.fei_regcap;
-	one.regcapcur = enterprise.fei_regcapcurname;
-	one.esdate = enterprise.fei_esdate;
-
-	one.save(callback);
-}
-/**
- * 得到一个公司的所有投资公司，并且储存起来
- * @return {obj}     返回一个状态值
- */
-var getEntsRelationAndSave = function(lcid, callback) {
-	async.waterfall([
-		function(cb) {
-			getMainInvest(lcid, function(err, relations) {
-				if(err) {
-					cb(err);
-				} else {
-					// 如果查找投资的公司有结果则返回tasklist列表
-					// 如果没有直接返回callback函数
-					if(relations.length > 0) {
-						cb(null, relations);
+						async.each(tasklist, getEnterAndRelationThenSave, function(err) {
+							if (err) {
+								cb(err);
+							} else {
+								cb(null);
+							}
+						})
+					}
+				], function(err, results) {
+					if (err) {
+						callback(err);
 					} else {
 						callback(null);
 					}
-				}
-			})
-		},
-		function(relations, cb) {
+				})
+			}
+		})
+	}
+	/**
+	 * 得到一个公司的具体信息并保存到数据库中
+	 * @param  {String}   lcid     公司的企+id
+	 * @return {Object}            返回保存后的信息
+	 */
+	var getEnterpriseAndSave = function(lcid, callback) {
+		async.waterfall([
+			function(cb) {
+				getEnterprise(lcid, function(err, result) {
+					if(err) {
+						cb(err);
+					} else {
+						console.log(result.fei_entname);
+						cb(null, result);
+					}
+				})
+			},
+			function(enterprise, cb) {
+				saveEnterprise(enterprise, function(err, result) {
+					if(err) {
+						cb(err);
+					} else {
+						cb(null, result);
+					}
+				})
+			}
+		], 
+		function(err, result) {
+			if(err) {
+				callback(err);
+			} else {
+				callback(null, result);
+			}
+		})
+	}
 
-			saveEntsRelation(relations, function(err, results) {
-				if(err) {
-					cb(err);
-				} else {
-					cb(null, results);
-				}
-			})
-			
-		}
-	], 
-	function(err, results) {
-		if(err) {
-			callback(err);
-		} else {
-			callback(null, results);
-		}
-	})
-}
+	var saveEnterprise = function(enterprise, callback) {
+		var one = new Enterprise();
 
-var saveEntsRelation = function(relations, callback) {
-	relations = _.map(relations, function(rel) {
-		return {
-			entsource: rel.lcid,
-			enttarget: rel.sub_lcid,
-			entname: rel.entname
-		}
-	})
-	// create只能用(array, arg1, arg2, arg3)来返回所有存储结果
-	Entsrelation.create(relations, callback);
-}
+		one.lcid = enterprise.lcid;
+		one.entname = enterprise.fei_entname;
+		one.address = enterprise.fei_oploc;
+		one.regno = enterprise.fei_regno;
+		one.corporation = enterprise.epp_name;
+		one.entindustry = enterprise.fei_industryphyname;
+		one.enttype = enterprise.fei_enttypename;
+		one.entstatus = enterprise.fei_entstatusname;
+		one.regorg = enterprise.fei_regorgname;
+		one.regcap = enterprise.fei_regcap;
+		one.regcapcur = enterprise.fei_regcapcurname;
+		one.esdate = enterprise.fei_esdate;
+
+		one.save(callback);
+	}
+	/**
+	 * 得到一个公司的所有投资公司，并且储存起来
+	 * @return {obj}     返回一个状态值
+	 */
+	var getEntsRelationAndSave = function(lcid, callback) {
+		async.waterfall([
+			function(cb) {
+				getMainInvest(lcid, function(err, relations) {
+					if(err) {
+						cb(err);
+					} else {
+						// 如果查找投资的公司有结果则返回tasklist列表
+						// 如果没有直接返回callback函数
+						if(relations.length > 0) {
+							cb(null, relations);
+						} else {
+							callback(null);
+						}
+					}
+				})
+			},
+			function(relations, cb) {
+
+				saveEntsRelation(relations, function(err, results) {
+					if(err) {
+						cb(err);
+					} else {
+						cb(null, results);
+					}
+				})
+				
+			}
+		], 
+		function(err, results) {
+			if(err) {
+				callback(err);
+			} else {
+				callback(null, results);
+			}
+		})
+	}
+
+	var saveEntsRelation = function(relations, callback) {
+		relations = _.map(relations, function(rel) {
+			return {
+				entsource: rel.lcid,
+				enttarget: rel.sub_lcid,
+				entname: rel.entname
+			}
+		})
+		// create只能用(array, arg1, arg2, arg3)来返回所有存储结果
+		Entsrelation.create(relations, callback);
+	}
 
 
-/**
- * 得到一个公司的所有股东关系，并且储存起来
- * @return {obj}     返回一个对象值
- */
-var getEntpreRelationAndSave = function(lcid, callback) {
-	async.waterfall([
-		function(cb) {
-			getInvestMent(lcid, function(err, relations) {
-				if(err) {
-					cb(err);
-				} else {
-					cb(null, relations);
-				}
-			})
-		},
-		function(relations, cb) {
-			saveEntpreRelation(relations, function(err, results) {
-				if(err) {
-					cb(err);
-				} else {
-					cb(null, results);
-				}
-			})
-		}
-	], 
-	function(err, results) {
-		if(err) {
-			callback(err);
-		} else {
-			callback(null, results);
-		}
-	})
-}
+	/**
+	 * 得到一个公司的所有股东关系，并且储存起来
+	 * @return {obj}     返回一个对象值
+	 */
+	var getEntpreRelationAndSave = function(lcid, callback) {
+		async.waterfall([
+			function(cb) {
+				getInvestMent(lcid, function(err, relations) {
+					if(err) {
+						cb(err);
+					} else {
+						cb(null, relations);
+					}
+				})
+			},
+			function(relations, cb) {
+				saveEntpreRelation(relations, function(err, results) {
+					if(err) {
+						cb(err);
+					} else {
+						cb(null, results);
+					}
+				})
+			}
+		], 
+		function(err, results) {
+			if(err) {
+				callback(err);
+			} else {
+				callback(null, results);
+			}
+		})
+	}
 
-var saveEntpreRelation = function(relations, callback) {
-	relations = _.map(relations, function(rel) {
-		return {
-			entsource: rel.sub_lcid,
-			entpre: rel.eii_inv,
-			conprop: rel.conprop,
-			enttarget: rel.lcid,
-			entname: rel.fei_enname
-		}
-	})
-	// create只能用(array, arg1, arg2, arg3)来返回所有存储结果
-	Entprerelation.create(relations, callback);
-}
+	var saveEntpreRelation = function(relations, callback) {
+		relations = _.map(relations, function(rel) {
+			return {
+				entsource: rel.sub_lcid,
+				entpre: rel.eii_inv,
+				conprop: rel.conprop,
+				enttarget: rel.lcid,
+				entname: rel.fei_enname
+			}
+		})
+		// create只能用(array, arg1, arg2, arg3)来返回所有存储结果
+		Entprerelation.create(relations, callback);
+	}
+// }

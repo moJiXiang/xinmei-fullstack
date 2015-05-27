@@ -1,7 +1,6 @@
 var path = require('path'),
     rootPath = path.normalize(__dirname + '/..'),
     env = process.env.NODE_ENV || 'development';
-console.log(process.env.NODE_ENV);
 var config = {
   development: {
     root: rootPath,

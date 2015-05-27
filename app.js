@@ -3,7 +3,9 @@
 var express = require('express'),
   config = require('./config/config'),
   glob = require('glob'),
-  mongoose = require('mongoose');
+  mongoose = require('mongoose'),
+  cluster = require('cluster'),
+  cCPUs = require('os').cpus().length;
 
 mongoose.connect(config.db);
 var db = mongoose.connection;
@@ -15,9 +17,24 @@ var models = glob.sync(config.root + '/app/models/*.js');
 models.forEach(function (model) {
   require(model);
 });
-var app = express();
 
-require('./config/express')(app, config);
+// 使用cluster，根据系统的cpu数量来创建工人进程
+if (cluster.isMaster) {
+	for (var i = 0; i < cCPUs; i++ ) {
+		cluster.fork();
+	}
+	cluster.on('online', function(worker) {
+		console.log('Worker ' + worker.process.pid + ' is online.');
+	});
+	cluster.on('exit', function(worker, code, signal) {
+		console.log('worker ' + worker.process.pid + ' died.');
+	});
+} else{
+	
+	var app = express();
 
-app.listen(config.port);
+	require('./config/express')(app, config);
 
+	app.listen(config.port);
+	console.log('App is running and Worker ' + cluster.worker.id + ' running!');
+}
