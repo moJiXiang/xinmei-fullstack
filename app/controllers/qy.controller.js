@@ -215,8 +215,6 @@ var initRequestOption = function(criteria, url) {
 	exports.loadQyEnterpriseData = function(req, res, next) {
 		// 根公司的id
 		var root = req.params.lcid;
-		// var asyncTask = [];
-		console.log(cluster.isMaster);
 		//将cpu 密集型的查询放到工作线程中
 		getEnterAndRelationThenSave(root, function(err) {
 			if (err) {
