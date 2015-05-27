@@ -13,6 +13,7 @@ var mongoose = require('mongoose'),
 exports.getEntsRelationWithTree = function(req, res, next) {
   // 将global_list清空，否则数据会量级增加
   global_list = _.drop(global_list, global_list.length);
+  global_entlcid = []
   var lcid = req.params.lcid;
   var request_timeout = null;
   request_timeout = setTimeout(function() {
@@ -36,6 +37,7 @@ exports.getEntsRelationWithTree = function(req, res, next) {
 // 获取行业结构图接口
 exports.getEntsRelationWithChart = function(req, res, next) {
   global_list = _.drop(global_list, global_list.length);
+  global_entlcid = []
   var lcid = req.params.lcid;
   var request_timeout = null;
   request_timeout = setTimeout(function() {
@@ -58,14 +60,11 @@ exports.getEntsRelationWithChart = function(req, res, next) {
 // 将数据转化为树状图所需的结构
 var parseToTreeData = function(lcid, global_list) {
   var treedata = {};
-  // var tree_entlcid = []
   // console.log(global_list);
   // 遍历每个节点的children，并且递归调用
   var traversalTreeData = function(children) {
     _.forEach(global_list, function(obj, i) {
       _.forEach(children, function(child) {
-        // tree_entlcid.push(obj.parent.lcid)
-        // 判断是否相互投资 parent.lcid = child.enttartget
         if(obj.parent && obj.parent.lcid == child.enttarget && lcid !== child.enttarget) {
           for(key in obj.parent) {
             child[key] = obj.parent[key];
@@ -84,7 +83,6 @@ var parseToTreeData = function(lcid, global_list) {
       for(key in obj.parent) {
         treedata[key] = obj.parent[key];
       }
-      // tree_entlcid.push(lcid)
       treedata.children = _.cloneDeep(obj.children);
       traversalTreeData(treedata.children)
     }
@@ -180,6 +178,7 @@ var getEnterpriseAndEntrelation = function(lcid, callback) {
           })
           for (var i = 0; i < global_entlcid.length; i++) {
             if(tasklist.indexOf(global_entlcid[i]) > 0) {
+
               tasklist = _.without(tasklist, global_entlcid[i])
             }
           };
