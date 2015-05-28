@@ -10,7 +10,7 @@ var express = require('express'),
 
 // 连接到存储抓取数据的数据库
 var conn = mongoose.createConnection(db2)
-XinmeispidersItem = conn.model('Searchdoc', 'XinmeispidersItem')
+SpidersResultItem = conn.model('Searchdoc', 'SpidersResultItem')
 module.exports = function (app) {
   app.use('/', router);
 };
@@ -36,7 +36,7 @@ router.get('/searchwordsmanage', function(req, res, next) {
     curpage = offset || 0;
     searchword = req.query.searchword
     if(searchword) {
-      XinmeispidersItem.list({criteria:{kw: searchword}, offset: offset}, function(err, results) {
+      SpidersResultItem.list({criteria:{kw: searchword}, offset: offset}, function(err, results) {
         res.render('searchdoc', {results: results, curpage: curpage, searchword: searchword})
       })
     } else{
@@ -49,7 +49,7 @@ router.get('/searchwordsmanage', function(req, res, next) {
         function(searchwords, callback) {
           async.map(searchwords, function(word, cb){
             var keyword = '"'+word.main+' '+word.keyword+' '+word.word+'"'
-            XinmeispidersItem.count({kw: keyword}, function(err, num){
+            SpidersResultItem.count({kw: keyword}, function(err, num){
               var obj = {}
               obj.kw = keyword
               obj.num = num
