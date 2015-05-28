@@ -1,14 +1,19 @@
 // Example model
 
 var mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+    Schema = mongoose.Schema,
+	ObjectId = Schema.Types.ObjectId;
 
 var SearchdocSchema = new Schema({
+  domain: String, // 1 :baidu, 2: google, 3: sogou
+  kwid: ObjectId,
   kw: String,
   title: String,
   url: String,
   brief: String,
-  domain: String, // 1 :baidu, 2: google, 3: sogou
+  sourceurl : String,
+  score: Number, // 最高12分
+  rank: String
 });
 
 // 在保存数据之前先检查是否存在，防治重复保存

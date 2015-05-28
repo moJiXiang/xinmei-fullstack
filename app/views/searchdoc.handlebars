@@ -12,8 +12,8 @@
     			<th>摘要</th>
 				<th>信源</th>    		
     			<th>域名</th>	
-    			<th>百度排名(1-01，10-09)</th>
-    			<th>打分(关键词同时出现在标题：3或者摘要：2，两处出现：4，摘要：1, 全无:0)</th>
+    			<th>排名</th>
+    			<th>打分</th>
     		</tr>
     	</thead>
 		<tbody>
@@ -21,7 +21,10 @@
 			<tr>
 				<th><a href="{{url}}">{{title}}</a></th>
 				<th>{{brief}}</th>
+				<th>{{sourceurl}}</th>
 				<th>{{domain}}</th>
+				<th>{{rank}}</th>
+				<th>{{score}}</th>
 			</tr>
 			{{/each}}
 		</tbody>

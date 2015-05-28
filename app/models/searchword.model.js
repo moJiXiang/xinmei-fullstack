@@ -6,10 +6,9 @@ var mongoose = require('mongoose'),
 /**
  * [SearchkeywordSchema description]
  * @type {Schema}
- * @param {Number} status 0:未被加到任务列表，1:正在被查询，2:查询完毕
- * @param {Boolean} isbdsearched 百度是否爬过内容
- * @param {Boolean} isglsearched 谷歌是否爬过内容
- * @param {Boolean} issgsearched 搜狗是否爬过内容
+ * @param {Boolean} isbdsearched 0:未被加到任务列表，1:正在被查询，2:查询完毕
+ * @param {Boolean} isglsearched 0:未被加到任务列表，1:正在被查询，2:查询完毕
+ * @param {Boolean} issgsearched 0:未被加到任务列表，1:正在被查询，2:查询完毕
  */
 var SearchwordSchema = new Schema({
   main : String, // 主体：公司或者人
