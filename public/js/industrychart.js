@@ -7,8 +7,8 @@
     allData = null;
     width = 0;
     height = 800;
-    img_w = 40;
-    img_h = 40;
+    img_w = 18;
+    img_h = 18;
     biggerH = 800;
     paddingTop = 20;
     paddingLeft = 80;
