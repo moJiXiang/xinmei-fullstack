@@ -2,7 +2,7 @@ $ ->
 	console.log('compile searchwordsmanage coffee success!')
 	apiBaseUri = '/v1/api'
 	optionsdata = {}
-	$('#fileupload').fileupload()
+	# $('#fileupload').fileupload()
 	$.ajax({
 		method: 'get',
 		url: "#{apiBaseUri}/words",
