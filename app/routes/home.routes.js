@@ -48,10 +48,9 @@ router.get('/searchwordsmanage', function(req, res, next) {
         },
         function(searchwords, callback) {
           async.map(searchwords, function(word, cb){
-            var keyword = '"'+word.main+' '+word.keyword+' '+word.word+'"'
-            SpidersResultItem.count({kw: keyword}, function(err, num){
+            SpidersResultItem.count({kw: word.kw}, function(err, num){
               var obj = {}
-              obj.kw = keyword
+              obj.kw = word.kw
               obj.num = num
               cb(null, obj)
             })

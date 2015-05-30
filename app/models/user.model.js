@@ -6,7 +6,8 @@ var mongoose = require('mongoose'),
 var UserSchema = new Schema({
   name: String,
   email: String,
-  pass: String
+  pass: String,
+  entfiles: Array // take down user upload files
 });
 
 UserSchema.pre('save', function(next) {

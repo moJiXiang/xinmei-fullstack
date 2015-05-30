@@ -23,7 +23,12 @@ exports.savesw = function(req, res, next) {
 	one.main = main
 	one.keyword = keyword
 	one.word = word
-	one.kw = '"' + main + ' ' + keyword + ' ' + word + '"'
+	if (main && keyword == '' && word == ''){
+		one.kw = '"' + main + '"'
+	} else{
+		
+		one.kw = main + ' ' + keyword + ' ' + word
+	}
 	one.save(function(err, result) {
 		if (err) {
 			res.json(new Status.NotFoundError('Not found results.'))

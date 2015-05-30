@@ -32,7 +32,17 @@ module.exports = function(app, config) {
   app.use(bodyParser.urlencoded({
     extended: true
   }));
-  app.use(multer());
+  app.use(multer({
+    dest : './userfiles/',
+    onFileUploadStart: function(file) {
+      console.log(file.originlname + ' is starting...');
+    },
+    onFileUploadComplete: function(file) {
+      console.log(file.fieldname + ' uploaded to ' + file.path);
+      done=true;
+    }
+
+  }));
   
   app.use(cookieParser());
   app.use(compress());

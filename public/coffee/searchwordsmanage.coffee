@@ -58,6 +58,8 @@ $ ->
 		main = $('#main').val()
 		keyword = $('#keyword option:selected').val()
 		word = $('#word option:selected').val()
+		if not main
+			return
 		$.ajax({
 			method: 'post',
 			url: "#{apiBaseUri}/searchwords",
@@ -68,7 +70,7 @@ $ ->
 			,
 			success: (result)->
 				searchwords = result.data
-				$('#searchwords-list').append('<li class="list-group-item">"'+searchwords.main+' '+searchwords.keyword+' '+searchwords.word+'"</li>')
+				$('#searchwords-list').append('<li class="list-group-item">'+searchwords.kw+'</li>')
 		})
 	)
 	

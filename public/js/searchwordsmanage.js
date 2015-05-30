@@ -78,6 +78,9 @@
       main = $('#main').val();
       keyword = $('#keyword option:selected').val();
       word = $('#word option:selected').val();
+      if (!main) {
+        return;
+      }
       return $.ajax({
         method: 'post',
         url: apiBaseUri + "/searchwords",
@@ -89,7 +92,7 @@
         success: function(result) {
           var searchwords;
           searchwords = result.data;
-          return $('#searchwords-list').append('<li class="list-group-item">"' + searchwords.main + ' ' + searchwords.keyword + ' ' + searchwords.word + '"</li>');
+          return $('#searchwords-list').append('<li class="list-group-item">' + searchwords.kw + '</li>');
         }
       });
     });
