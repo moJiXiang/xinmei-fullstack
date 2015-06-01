@@ -13,7 +13,8 @@ var SearchdocSchema = new Schema({
   brief: String,
   sourceurl : String,
   score: Number, // 最高12分
-  rank: String
+  rank: String,
+  content: String
 });
 
 // 在保存数据之前先检查是否存在，防治重复保存

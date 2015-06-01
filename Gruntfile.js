@@ -54,7 +54,8 @@ module.exports = function (grunt) {
           'public/js/login.js' : 'public/coffee/login.coffee',
           'public/js/wordsmanage.js' : 'public/coffee/wordsmanage.coffee',
           'public/js/searchwordsmanage.js' : 'public/coffee/searchwordsmanage.coffee',
-          'public/js/user.js' : 'public/coffee/user.coffee'
+          'public/js/user.js' : 'public/coffee/user.coffee',
+          'public/js/searchdoc.js' : 'public/coffee/searchdoc.coffee'
         }
       }
     },
