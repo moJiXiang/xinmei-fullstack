@@ -81,6 +81,9 @@
       if (!main) {
         return;
       }
+      if (!keyword) {
+        return;
+      }
       return $.ajax({
         method: 'post',
         url: apiBaseUri + "/searchwords",

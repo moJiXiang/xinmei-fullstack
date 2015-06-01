@@ -352,10 +352,12 @@ var saveEnterprise = function(enterprise, callback) {
 
 	one.lcid = enterprise.lcid;
 	one.entname = enterprise.fei_entname;
-	one.address = enterprise.fei_oploc;
+	one.address = enterprise.fei_dom;
+	one.oploc = enterprise.fei_oploc;
 	one.regno = enterprise.fei_regno;
 	one.corporation = enterprise.epp_name;
 	one.entindustry = enterprise.fei_industryphyname;
+	one.totalscpoe = enterprise.fei_totalscpoe;
 	one.enttype = enterprise.fei_enttypename;
 	one.entstatus = enterprise.fei_entstatusname;
 	one.regorg = enterprise.fei_regorgname;

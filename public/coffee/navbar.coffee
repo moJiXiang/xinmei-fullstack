@@ -164,7 +164,7 @@ $ ->
 		)
 
 	bindRefreshFuc = ()->
-		$('#entrefresh-btn').click(()->
+		$('.entrefresh-btn').one("click", ()->
 			console.log '----------'
 			lcid = $(this).data('lcid')
 			$.ajax({

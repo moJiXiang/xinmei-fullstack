@@ -23,11 +23,13 @@ var mongoose = require('mongoose'),
 var EnterpriseSchema = new Schema({
 	lcid: String,
 	entname: String,
-	address: String,
+	address: String, // 公司地址
+	oploc: String, // 注册地址
 	regno: String,
 	corporation: String,
 	corporation_ref: {type: ObjectId, ref: 'Entrepreneur'},
 	entindustry: String,
+	totalscpoe: String, // 经营范围
 	enttype: String,
 	entstatus: String,
 	regorg: String,

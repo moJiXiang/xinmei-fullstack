@@ -381,6 +381,23 @@ Network = ()->
 			!linkedByIndex[invest.entsource + ', ' + invest.enttarget]
 		drawInvestment center, clearInvestment
 
+		# 在行业投资图的右侧增加企业基本信息
+		console.log d
+		content = "<table class='table table-striped'><thead>工商注册信息</thead><tbody>"
+		content += "<tr><td width='40%'><span>注册名称</span></td><td><p>#{d.entname}</p></td></tr>"
+		content += "<tr><td width='40%'><span>经营状况</span></td><td><p>#{d.entstatus}</p></td></tr>"
+		content += "<tr><td width='40%'><span>成立时间</span></td><td><p>#{d.esdate}</p></td></tr>"
+		content += "<tr><td width='40%'><span>注册资金</span></td><td><p>#{d.regcap}#{d.regcapcur}</p></td></tr>"
+		content += "<tr><td width='40%'><span>注册号</span></td><td><p>#{d.regno}</p></td></tr>"
+		content += "<tr><td width='40%'><span>法人代表</span></td><td><p>#{d.corporation}</p></td></tr>"
+		content += "<tr><td width='40%'><span>所处行业</span></td><td><p>#{d.entindustry}</p></td></tr>"
+		content += "<tr><td width='40%'><span>注册地址</span></td><td><p>#{d.oploc}</p></td></tr>"
+		content += "<tr><td width='40%'><span>经营地址</span></td><td><p>#{d.address}</p></td></tr>"
+		content += "<tr><td width='40%'><span>经营范围</span></td><td><p>#{d.totalscpoe}</p></td></tr>"
+		content += "</tbody></table>"
+		$('.regmsg').append(content)
+
+
 	hideDetails = (d, i)->
 		d3.select('.investments').remove()
 		nodes.style("stroke-width", 2.0)
@@ -388,6 +405,8 @@ Network = ()->
 		links.style("stroke-width", 1.0)
 		nodes.style("stroke", "#ddd")
 		links.style("stroke", "#ddd")
+
+		$('.regmsg').html('')
 
 	# 给两个点，然后通过linkedByindex来判断是否有关系
 	neighboring = (a, b)->

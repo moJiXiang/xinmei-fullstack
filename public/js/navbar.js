@@ -185,7 +185,7 @@
       });
     };
     return bindRefreshFuc = function() {
-      return $('#entrefresh-btn').click(function() {
+      return $('.entrefresh-btn').one("click", function() {
         var lcid;
         console.log('----------');
         lcid = $(this).data('lcid');

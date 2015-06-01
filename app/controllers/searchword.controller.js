@@ -25,7 +25,9 @@ exports.savesw = function(req, res, next) {
 	one.word = word
 	if (main && keyword == '' && word == ''){
 		one.kw = '"' + main + '"'
-	} else{
+	} else if (main && keyword && word == ''){
+		one.kw = main + ' ' + keyword
+	} else {
 		
 		one.kw = main + ' ' + keyword + ' ' + word
 	}

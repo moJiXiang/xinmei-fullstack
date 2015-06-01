@@ -45,7 +45,7 @@ this["JST"]["public/templates/search-doc.handlebars"] = Handlebars.template({"co
 this["JST"]["public/templates/search-results.handlebars"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
     var stack1;
 
-  return "<table class=\"table table-hover\">\n  <thead>\n    <tr>\n      <th>#</th>\n      <th>lcid</th>\n      <th>公司名</th>\n      <th>有无企+数据</th>\n      <th>操作</th>\n      <th>搜索数据</th>\n      <th>下载文章数据</th>\n    </tr>\n  </thead>\n  <tbody>\n"
+  return "<table class=\"table table-hover\">\n  <thead>\n    <tr>\n      <th>#</th>\n      <th>lcid</th>\n      <th>公司名</th>\n      <th>有无企+数据</th>\n      <th>操作</th>\n    </tr>\n  </thead>\n  <tbody>\n"
     + ((stack1 = helpers.each.call(depth0,(depth0 != null ? depth0.data : depth0),{"name":"each","hash":{},"fn":this.program(2, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + "  </tbody>\n</table>\n";
 },"2":function(depth0,helpers,partials,data) {
@@ -61,17 +61,7 @@ this["JST"]["public/templates/search-results.handlebars"] = Handlebars.template(
     + ((stack1 = helpers['if'].call(depth0,(depth0 != null ? depth0.status : depth0),{"name":"if","hash":{},"fn":this.program(3, data, 0),"inverse":this.program(5, data, 0),"data":data})) != null ? stack1 : "")
     + "      </td>\n      <td>\n"
     + ((stack1 = helpers['if'].call(depth0,(depth0 != null ? depth0.status : depth0),{"name":"if","hash":{},"fn":this.program(7, data, 0),"inverse":this.program(9, data, 0),"data":data})) != null ? stack1 : "")
-    + "      </td>\n      <td>\n        <a href=\"/searchdoc/"
-    + alias1(alias2((depth0 != null ? depth0.lcid : depth0), depth0))
-    + "\">"
-    + alias1(alias2((depth0 != null ? depth0.count : depth0), depth0))
-    + "</a>\n      </td>\n      <td>\n        <button type=\"button\" class=\"btn btn-default loaddocs-btn\" data-enterprise=\""
-    + alias1(alias2((depth0 != null ? depth0.fei_entname : depth0), depth0))
-    + "\" data-lcid=\""
-    + alias1(alias2((depth0 != null ? depth0.lcid : depth0), depth0))
-    + "\" data-status = \""
-    + alias1(alias2((depth0 != null ? depth0.status : depth0), depth0))
-    + "\" data-toggle=\"modal\" data-target=\"#articledatamodal\">搜索文章</button>\n      </td>\n    </tr>\n";
+    + "      </td>\n    </tr>\n";
 },"3":function(depth0,helpers,partials,data) {
     return "        <p class=\"text-success\">有数据</p>\n";
 },"5":function(depth0,helpers,partials,data) {
@@ -83,7 +73,7 @@ this["JST"]["public/templates/search-results.handlebars"] = Handlebars.template(
     + alias3(((helper = (helper = helpers.lcid || (depth0 != null ? depth0.lcid : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"lcid","hash":{},"data":data}) : helper)))
     + "/enterprisetree\" role=\"button\">查看树状图</a>     	\n        	<a class=\"btn btn-default\" href=\"/enterprise/"
     + alias3(((helper = (helper = helpers.lcid || (depth0 != null ? depth0.lcid : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"lcid","hash":{},"data":data}) : helper)))
-    + "/industrychart\" role=\"button\">查看行业结构图</a>\n          <button class=\"btn btn-default\" id=\"entrefresh-btn\" data-lcid = \""
+    + "/industrychart\" role=\"button\">查看行业结构图</a>\n          <button class=\"btn btn-default entrefresh-btn\" data-lcid = \""
     + alias3(((helper = (helper = helpers.lcid || (depth0 != null ? depth0.lcid : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"lcid","hash":{},"data":data}) : helper)))
     + "\" role=\"button\">更新数据</button>\n";
 },"9":function(depth0,helpers,partials,data) {

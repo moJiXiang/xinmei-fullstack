@@ -60,6 +60,10 @@ $ ->
 		word = $('#word option:selected').val()
 		if not main
 			return
+			
+		if not keyword
+			return
+			
 		$.ajax({
 			method: 'post',
 			url: "#{apiBaseUri}/searchwords",
