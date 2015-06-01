@@ -11,7 +11,7 @@
     img_h = 18;
     biggerH = 800;
     paddingTop = 20;
-    paddingLeft = 80;
+    paddingLeft = 150;
     paddinginner = 20;
     multiple = 1;
     titles = [];
@@ -400,9 +400,15 @@
         }
       });
       investments.enter().append("svg:g").insert('text').attr("class", "investmentname").attr("x", function(d) {
-        return d.x - d.entpre.length * 10 / 2;
+        return d.x;
       }).attr("y", function(d) {
-        return d.y - img_h / 2 - 10;
+        return d.y;
+      }).attr('transform', function(d) {
+        if (d.startangle > 90 && d.startangle < 270) {
+          return "rotate(" + (d.startangle - 180) + " " + d.x + ", " + d.y + ") translate(" + (-d.entpre.length * 10 - 10) + ")";
+        } else {
+          return "rotate(" + d.startangle + " " + d.x + ", " + d.y + ") translate(10)";
+        }
       }).text(function(d) {
         return d.entpre;
       });

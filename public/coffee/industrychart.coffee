@@ -8,7 +8,7 @@ Network = ()->
 	img_h = 18
 	biggerH = 800
 	paddingTop = 20
-	paddingLeft = 80
+	paddingLeft = 150
 	paddinginner = 20
 	# y轴坐标的倍数
 	multiple = 1
@@ -511,8 +511,17 @@ Network = ()->
 			.insert('text')
 			.attr("class", "investmentname")
 			# .attr('r', 10)
-			.attr("x", (d)-> d.x - d.entpre.length * 10 / 2)
-			.attr("y", (d)-> d.y - img_h / 2 - 10)
+			# .attr("x", (d)-> d.x - d.entpre.length * 10 / 2)
+			# .attr("y", (d)-> d.y - img_h / 2 - 10)
+			.attr("x", (d)-> d.x)
+			.attr("y", (d)-> d.y)
+			.attr('transform', (d)->
+
+				if d.startangle > 90 and d.startangle < 270
+					return "rotate(#{d.startangle - 180} #{d.x}, #{d.y}) translate(#{-d.entpre.length * 10 - 10})"
+				else
+					return "rotate(#{d.startangle} #{d.x}, #{d.y}) translate(10)"
+			)
 			.text((d)-> d.entpre)
 		# 增加指向箭头
 		investmentGroup.append("defs").append("marker")

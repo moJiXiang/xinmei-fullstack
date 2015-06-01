@@ -4,9 +4,11 @@ var express = require('express'),
   Enterprise = mongoose.model('Enterprise'),
   Entsrelation = mongoose.model('Entsrelation'),
   router = express.Router(),
+  request = require('request'),
   fs = require('fs'),
   async = require('async'),
   _ = require('lodash'),
+  csv = require('csv'),
   iconv = require('iconv-lite'),
   Status = require('../helpers/status'),
   apiBaseUri = require('../../config/config').apiBaseUri;
@@ -28,28 +30,35 @@ router.post('/fileupload', function(req, res, next) {
 
 router.get('/deep', function(req, res, next) {
 	// 深度查询
-	var ans = []
-	var deepFindEnt = function(lcid, deep) {
+	// var ans = []
+	// var deepFindEnt = function(lcid, deep) {
 
-		Entsrelation.find({entsource: lcid})
-			.exec(function(err, results) {
-				console.log(results);
-				if(results.length) {
-					for (var i = 0; i < results.length; i++) {
-						deepFindEnt(results[i].enttarget, deep + 1)
-					};
-				} else {
-					ans.push(deep);
-					realdeep = _.max(ans)
-				}
-				// return realdeep
-			})
-	}
+	// 	Entsrelation.find({entsource: lcid})
+	// 		.exec(function(err, results) {
+	// 			console.log(results);
+	// 			if(results.length) {
+	// 				for (var i = 0; i < results.length; i++) {
+	// 					deepFindEnt(results[i].enttarget, deep + 1)
+	// 				};
+	// 			} else {
+	// 				ans.push(deep);
+	// 				realdeep = _.max(ans)
+	// 			}
+	// 			// return realdeep
+	// 		})
+	// }
+	// var d = deepFindEnt("12019300122006021500010120000", 0)
 
-	var d = deepFindEnt("12019300122006021500010120000", 0)
-	console.log(d);
+	request('http://localhost:3000/v1/api/analysis/12019300122006021500010120000/industrychart', function(err, response, body) {
+		nodes = JSON.parse(body).data.nodes;
+		deeps = _.map(nodes, function(n) {
+			return n.deep;
+		})
+		console.log(_.max(deeps));
+	})
 })
 
+// TODO:根据用户的存储的文件来分析
 router.get('/analysisfile', function(req, res, next) {
 	fs.readFile('./userfiles/6eb71006f58fdbd4a4343859aa50db4b.txt', function(err, data) {
 		if(err) throw err;
@@ -79,35 +88,30 @@ router.get('/analysisfile', function(req, res, next) {
 						.lean()
 						.exec(function(err, results) {
 							obj.relationentsnum = results.length
-							var relentnames = _.map(results, function(r){ return r.entname });
-							var count = 0
-							for (var i = 0; i < relentnames.length; i++) {
-								if (entnames.indexOf(relentnames[i]) > 0) {
-									count ++
-								}
-							};
-							obj.thislistrelationnum = count
 							callback(null, obj);
 						})
 				},
 				function(obj, callback) {
-					// 深度查询
-					var ans = -1
-					var deepFindEnt = function(lcid, deep) {
+					request('http://localhost:3000/v1/api/analysis/'+obj.lcid + '/industrychart', function(err, response, body) {
+						nodes = JSON.parse(body).data.nodes;
+						var relentnames = _.map(nodes, function(n){ return n.entname });
+						var count = 0
+						for (var i = 0; i < relentnames.length; i++) {
+							if (entnames.indexOf(relentnames[i]) > 0) {
+								count ++
+							}
+						};
+						obj.thislistrelationnum = count
+						callback(null, obj, nodes)
+					})
 
-						Entsrelation.find({entsource: lcid})
-							.exec(function(err, results) {
-								if(results) {
-									for (var i = 0; i < results.length; i++) {
-										deepFindEnt(results.lcid, deep + 1)
-									};
-								} else {
-									ans = _.max(ans, deep)
-								}
-							})
-					}
-
-					deepFindEnt(obj.lcid, 0)
+				},
+				function(obj, nodes, callback) {
+					deeps = _.map(nodes, function(n) {
+						return n.deep;
+					})
+					obj.realdeep = _.max(deeps)
+					callback(null, obj)
 
 				}
 
@@ -116,7 +120,33 @@ router.get('/analysisfile', function(req, res, next) {
 			})
 			
 		}, function(err, results) {
-			res.json(results);
+			var text = []
+			for (var i = 0; i < results.length; i++) {
+				if(results[i]){
+					text.push(results[i])
+				}
+			};
+
+			// csv()
+			// 	.from.array(text)
+			// 	.to.path('./userfiles/ents.csv')
+
+			fs.open('./userfiles/ents.txt', 'a+', function(e, fd) {
+				if (e) {
+					throw e;
+				}
+				var text = '公司 关联公司数 投资层级数 此表关联公司\n'
+				for (var i = 0; i < results.length; i++) {
+					if (results[i]) {
+
+						text += results[i].entname + ' ' + results[i].relationentsnum + ' ' + results[i].realdeep + ' ' + results[i].thislistrelationnum + '\n'
+					}
+				};
+				console.log(text);
+				fs.write(fd, text, 0, 'utf-8', function(e) {
+					res.end('success');
+				})
+			})
 		})
 
 	})
