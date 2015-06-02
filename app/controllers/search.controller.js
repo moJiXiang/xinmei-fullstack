@@ -40,26 +40,30 @@ exports.listSearchResult = function(req, res, next) {
 		local: function(cb) {
 			Enterprise.list({criteria: {entname: {$regex:options.enterprise}}}, cb)
 		},
-		qy: function(cb) {
-			listSearchResultByQy(options, cb)
-		}
+		// qy: function(cb) {
+		// 	listSearchResultByQy(options, cb)
+		// }
 
 	},
 
 	function(err, results) {
 		// 查找没有数据的条目,并给赋予一个有无数据的状态
-		_.forEach(results.qy, function(qre) {
-			qre.status = 0;
-			_.forEach(results.local, function(lre) {
-				if (qre.lcid == lre.lcid) {
-					qre.status = 1;
-				} 
+		// _.forEach(results.qy, function(qre) {
+		// 	qre.status = 0;
+		// 	_.forEach(results.local, function(lre) {
+		// 		if (qre.lcid == lre.lcid) {
+		// 			qre.status = 1;
+		// 		} 
+		// 	})
+		// })
+		_.forEach(results.local, function(lre) {
+					lre.status = 1;
 			})
-		})
-		async.map(results.qy, countSearchdoc, function(err, results) {
+		async.map(results.local, countSearchdoc, function(err, results) {
 			if (err) {
 				res.json(new Status.NotFoundError('Not found results.'))
 			} else {
+				console.log(results);
 				res.json(new Status.SuccessStatus('Find success.', results));
 			}
 		})
