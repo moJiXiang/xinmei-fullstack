@@ -56,7 +56,7 @@ this["JST"]["public/templates/search-results.handlebars"] = Handlebars.template(
     + "</td>\n      <td>"
     + alias1(alias2((depth0 != null ? depth0.lcid : depth0), depth0))
     + "</td>\n      <td>"
-    + alias1(alias2((depth0 != null ? depth0.entname : depth0), depth0))
+    + alias1(alias2((depth0 != null ? depth0.fei_entname : depth0), depth0))
     + "</td>\n      <td>\n"
     + ((stack1 = helpers['if'].call(depth0,(depth0 != null ? depth0.status : depth0),{"name":"if","hash":{},"fn":this.program(3, data, 0),"inverse":this.program(5, data, 0),"data":data})) != null ? stack1 : "")
     + "      </td>\n      <td>\n"

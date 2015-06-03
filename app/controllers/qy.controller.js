@@ -185,7 +185,7 @@ var initRequestOption = function(criteria, url) {
 	    type: "全部",
 	    osVersion: "8.0.2",
 	    sourceId: (null),
-	    userId: "ff8080814cb72494014cb7254ae40000",
+	    userId: "ff8080814c785e09014c965bddb8147d",
 	    ver: (null)
 	};
 	for(key in criteria) {
@@ -199,7 +199,7 @@ var initRequestOption = function(criteria, url) {
 	    'User-Agent': 'Entplus/1.3.3 (iPhone; iOS 8.0.2; Scale/2.00)',
 	    'Accept-Language': 'en;q=1, zh-Hans;q=0.9',
 	    'Accept-Encoding': 'gzip, deflate',
-	    'Cookie': 'JSESSIONID=9B39A310056ABB46CBFEFB53F13A90BD',
+	    'Cookie': 'JSESSIONID=D89086C50FC4855FB6AFD526BE764081',
 	};
 	var options = {
 	    hostname: 'app.entplus.cn',
