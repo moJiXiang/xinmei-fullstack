@@ -342,13 +342,13 @@ Network = ()->
 				nodePosition.get(d.lcid).y
 				)
 			# 点击绘制该点的投资公司或者股东
-			# .on('click', showDetails)
+			.on('click', showDetails)
 			# 当鼠标移动到某个企业点上的时候，使和它相关的企业都要高亮
-			.on('mouseover', showDetails)
-			.on('mouseout', hideDetails)
+			# .on('mouseover', showDetails)
+			# .on('mouseout', hideDetails)
 	# 高亮有关系的点
 	showDetails = (d, i)->
-		# hideDetails(d, i)
+		hideDetails(d, i)
 		nodes.style("stroke-width", (n)->
 			if (neighboring(d, n) ) then 5.0 else 1.0
 		)
@@ -382,20 +382,19 @@ Network = ()->
 		drawInvestment center, clearInvestment
 
 		# 在行业投资图的右侧增加企业基本信息
-		console.log d
-		content = "<table class='table table-striped'><thead>工商注册信息</thead><tbody>"
-		content += "<tr><td width='40%'><span>注册名称</span></td><td><p>#{d.entname}</p></td></tr>"
-		content += "<tr><td width='40%'><span>经营状况</span></td><td><p>#{d.entstatus}</p></td></tr>"
-		content += "<tr><td width='40%'><span>成立时间</span></td><td><p>#{d.esdate}</p></td></tr>"
-		content += "<tr><td width='40%'><span>注册资金</span></td><td><p>#{d.regcap}#{d.regcapcur}</p></td></tr>"
-		content += "<tr><td width='40%'><span>注册号</span></td><td><p>#{d.regno}</p></td></tr>"
-		content += "<tr><td width='40%'><span>法人代表</span></td><td><p>#{d.corporation}</p></td></tr>"
-		content += "<tr><td width='40%'><span>所处行业</span></td><td><p>#{d.entindustry}</p></td></tr>"
-		content += "<tr><td width='40%'><span>注册地址</span></td><td><p>#{d.oploc}</p></td></tr>"
-		content += "<tr><td width='40%'><span>经营地址</span></td><td><p>#{d.address}</p></td></tr>"
-		content += "<tr><td width='40%'><span>经营范围</span></td><td><p>#{d.totalscpoe}</p></td></tr>"
-		content += "</tbody></table>"
-		$('.regmsg').append(content)
+		content = "<div class='gsmsg'><h4>工商注册信息</h4>"
+		content += "<dl><dt class='title'>注册名称</dt><dd class='info'>#{d.entname}</dd></dl>"
+		content += "<dl><dt class='title'>经营状况</dt><dd class='info'>#{d.entstatus}</dd></dl>"
+		content += "<dl><dt class='title'>成立时间</dt><dd class='info'>#{d.esdate}</dd></dl>"
+		content += "<dl><dt class='title'>注册资金</dt><dd class='info'>#{d.regcap}万#{d.regcapcur}</dd></dl>"
+		content += "<dl><dt class='title'>注册号</dt><dd class='info'>#{d.regno}</dd></dl>"
+		content += "<dl><dt class='title'>法人代表</dt><dd class='info'>#{d.corporation}</dd></dl>"
+		content += "<dl><dt class='title'>所处行业</dt><dd class='info'>#{d.entindustry}</dd></dl>"
+		content += "<dl><dt class='title'>注册地址</dt><dd class='info'>#{d.oploc}</dd></dl>"
+		content += "<dl><dt class='title'>经营地址</dt><dd class='info'>#{d.address}</dd></dl>"
+		content += "<dl><dt class='title'>经营范围</dt><dd class='info'>#{d.totalscpoe}</dd></dl>"
+		content += "</div>"
+		$('#regmsg').append(content)
 
 
 	hideDetails = (d, i)->
@@ -406,7 +405,7 @@ Network = ()->
 		nodes.style("stroke", "#ddd")
 		links.style("stroke", "#ddd")
 
-		$('.regmsg').html('')
+		$('#regmsg').html('')
 
 	# 给两个点，然后通过linkedByindex来判断是否有关系
 	neighboring = (a, b)->
@@ -431,8 +430,9 @@ Network = ()->
 				entregcapwidth = d.regcap.toString().length * 5
 				"translate(#{- entregcapwidth/2}, #{5/2})")
 			.text((d)-> d.regcap)
-			.on('mouseover', showDetails)
-			.on('mouseout', hideDetails)
+			.on('click', showDetails)
+			# .on('mouseover', showDetails)
+			# .on('mouseout', hideDetails)
 	appendEntname = ()->
 		entNameGroup = container.append("svg:g")
 			.attr("class", "entnames")
@@ -527,6 +527,12 @@ Network = ()->
 					'/img/grayman.png')
 
 		investments.enter().append("svg:g")
+			.insert('a')
+			.attr('xlink:href', (d)->
+				if d.entsource
+					return "http://localhost:3000/enterprise/#{d.entsource}/industrychart"
+			)
+			.attr('target', '_blank')
 			.insert('text')
 			.attr("class", "investmentname")
 			# .attr('r', 10)
@@ -572,6 +578,7 @@ Network = ()->
 industryNetwork = Network()
 
 lcid = $('#entname').data('lcid');
+
 d3.json '/v1/api/analysis/'+lcid+'/industrychart', (json) ->
 
 	data = json.data

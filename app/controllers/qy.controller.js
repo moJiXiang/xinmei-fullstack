@@ -3,6 +3,8 @@ var mongoose = require('mongoose'),
     Enterprise = mongoose.model('Enterprise'),
     Entsrelation = mongoose.model('Entsrelation'),
     Entprerelation = mongoose.model('Entprerelation'),
+    Entpatent = mongoose.model('Entpatent'),
+    Entcopyright = mongoose.model('Entcopyright'),
     request = require('request'),
     Status = require('../helpers/status'),
     async = require('async'),
@@ -10,7 +12,7 @@ var mongoose = require('mongoose'),
     _ = require('lodash'),
     cp = require('child_process'),
     search = require('./search.controller'),
-    Qy = 'http://app.entplus.cn',
+    Qy = 'http://app.entplus.cn/entplus1.4',
     second = 1;
 
 // 组织结构化的数据返回
@@ -173,6 +175,56 @@ var getFzjg = function(lcid, cb) {
 	})
 }
 
+// 抓取企业的专利数据
+exports.fProPatentdetailinfoList = function(req, res, next) {
+	var lcid = req.params.lcid;
+
+
+}
+
+var getProPatentdetailinfoList = function(lcid, cb) {
+	var url = Qy + '/company/fProPatentdetailinfoList';
+
+	var options = initRequestOption({lcid: lcid}, url);
+	request(options, function(err, response, body) {
+		if(err) {
+			cb(err);
+		} else {
+			var prolist = JSON.parse(body).data.list;
+			cb(null, prolist);
+		}
+	})
+}
+
+var getPatentdetail = function(proid, cb) {
+	var url = Qy + '/company/fProPatentdetailinfo';
+
+	var options = initRequestOption({id: proid}, url);
+	request(options, function(err, response, body) {
+		if(err) {
+			cb(err);
+		} else {
+			var proinfo = JSON.parse(body).data;
+			cb(null, proinfo)
+		}
+	})
+}
+
+// 抓取企业的软件著作权
+var getProSoftwareCopyrightList = function(lcid, cb) {
+	var url = Qy + '/company/fProSoftwareCopyrightList';
+
+	var options = initRequestOption({lcid: lcid}, url);
+	request(options, function(err, response, body) {
+		if(err) {
+			cb(err);
+		} else {
+			var copyrightlist = JSON.parse(body).data.list;
+			cb(null, copyrightlist);
+		}
+	})
+}
+
 // 初始化对企＋的请求头
 var initRequestOption = function(criteria, url) {
 	var data = {
@@ -261,6 +313,12 @@ var getEnterAndRelationThenSave = function(lcid, callback) {
 		},
 		function(cb) {
 			getEntpreRelationAndSave(lcid, cb);
+		},
+		function(cb) {
+			getEntPatentlistAndSave(lcid, cb);
+		},
+		function(cb) {
+			getEntcopyrightAndSave(lcid, cb);
 		}
 	], function(err, results) {
 		if(err) {
@@ -284,8 +342,6 @@ var getEnterAndRelationThenSave = function(lcid, callback) {
 									tasklist = _.without(tasklist, global_entlcid[i])
 								}
 							};
-							console.log(tasklist)
-							console.log('===============');
 							cb(null, tasklist);
 						}
 					});
@@ -454,6 +510,72 @@ var getEntpreRelationAndSave = function(lcid, callback) {
 			callback(null, results);
 		}
 	})
+}
+
+var getEntcopyrightAndSave = function(lcid, callback) {
+	getProSoftwareCopyrightList(lcid, function(err, results) {
+		if(err) {
+			callback(err);
+		} else {
+			results = _.map(results, function(result){
+				return {id: result.id, 
+					lcid: result.lcid,
+					regnumber: result.frj_regnumber, 
+					classnumber: result.frj_classnumber,
+					classname: result.frj_classname, 
+					softname: result.frj_softname, 
+					softrefname: result.frj_softrefname,
+					version: result.frj_version, 
+					owner: result.frj_owner
+				}
+			})
+			Entcopyright.create(results, callback);
+		}
+	})
+}
+var getEntPatentlistAndSave = function(lcid, callback) {
+	async.waterfall([
+		function(cb) {
+			getProPatentdetailinfoList(lcid, function(err, patentlist) {
+				if(err) {
+					cb(err);
+				} else {
+					cb(null, patentlist);
+				}
+			})
+		},
+		function(patentlist, cb) {
+			async.map(patentlist, function(patent, ccb) {
+				getPatentdetail(patent.id, function(err, proinfo) {
+					if(err) {
+						ccb(err);
+					} else {
+						ccb(null, proinfo);
+					}
+				})
+			}, function(err, results) {
+				cb(null, results);
+			})
+		},
+		function(patentinfolist, cb) {
+			patentinfolist = _.map(patentinfolist, function(patent) {
+				return {
+					id: patent.id,
+					lcid: patent.fpp_lcid,
+					type: patent.fpp_type,
+					sqh: patent.fpp_sqh, 
+					sqr: patent.fpp_sqr	,
+					mc: patent.fpp_mc, 
+					classnum: patent.fpp_classnum,
+					sqzlqr: patent.fpp_sqzlqr, 
+					fmsjr: patent.fpp_fmsjr, 
+					xxjs: patent.fpp_xxjs, 
+					flzt: patent.fpp_flzt, 
+				}
+			})
+			Entpatent.create(patentinfolist, callback);
+		}
+	])
 }
 
 var saveEntpreRelation = function(relations, callback) {

@@ -114,11 +114,6 @@ var listSearchResultByQy = function (options, cb) {
 	    userId: "ff8080814cbc7f6f014cca52197b128a",
 	    ver: (null)
 	};
-	var proxy = {
-		proxy_host: "",
-		username: "",
-		password: ""
-	};
 	var headers = {
 	    'Host': 'app.entplus.cn',
 	    'Content-Type': 'application/x-www-form-urlencoded',
