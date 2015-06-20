@@ -7,9 +7,15 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var multer = require('multer');
 var compress = require('compression');
+
+var mongoose = require('mongoose');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
+
 var methodOverride = require('method-override');
 var exphbs  = require('express-handlebars');
 var hbshelpers = require('../app/helpers/hbshelpers');
+var middleware = require('../app/helpers/middleware');
 
 module.exports = function(app, config) {
   var hbs = exphbs.create({
@@ -45,6 +51,15 @@ module.exports = function(app, config) {
   }));
   
   app.use(cookieParser());
+
+  app.use(session({
+    secret: 'user_id',
+    ttl: 14 * 24 * 60 * 60,
+    store: new MongoStore({
+      mongooseConnection: mongoose.connection
+    })
+  }))
+  
   app.use(compress());
   app.use(express.static(config.root + '/public'));
   app.use(methodOverride());
@@ -54,6 +69,7 @@ module.exports = function(app, config) {
     require(route)(app);
   });
 
+  app.all('/*', middleware.requireUser);
   var routes = glob.sync(config.root + '/app/routes/*.js');
   routes.forEach(function (route) {
     require(route)(app);

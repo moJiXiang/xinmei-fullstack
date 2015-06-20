@@ -2,16 +2,16 @@ $ ->
 	console.log 'compile navbar coffee success'
 	apiBaseUri = '/v1/api'
 
-	name = $.cookie('xinmei-fullstack-name')
-	if name
-		$('.authentication-list').hide()
-		$('.user-list').show()
-		$('.search-field').show()
-		$('.user-list').find('.user').text(name)
-	else
-		$('.authentication-list').show()
-		$('.user-list').hide()
-		$('.search-field').hide()
+	# name = $.cookie('xinmei-fullstack-name')
+	# if name
+	# 	$('.authentication-list').hide()
+	# 	$('.user-list').show()
+	# 	$('.search-field').show()
+	# 	$('.user-list').find('.user').text(name)
+	# else
+	# 	$('.authentication-list').show()
+	# 	$('.user-list').hide()
+	# 	$('.search-field').hide()
 
 	# 搜索框的ajax请求，包括进度条功能
 	sendSearch = ()->

@@ -101,17 +101,17 @@ var listSearchResultByQy = function (options, cb) {
 	var url = Qy + '/company/fQyEnterprisebaseinfoList';
 	var data = {
 	    appKey: (null),
-	    appVersion: "1.3.3",
-	    imei: "EF0D574C-628C-4334-9DF9-75C2AE7DDBDE",
+	    appVersion: "1.4.5",
+	    imei: "CE71DB4A-74EC-44AB-9980-F8A46D3E9686",
 	    os: "iPhone OS",
 	    keyword: options.enterprise,
 	    // page: 1,
 	    // rows: 10,
 	    page: options.page,
 	    rows: options.rows,
-	    osVersion: "8.0.2",
+	    osVersion: "8.0",
 	    sourceId: (null),
-	    userId: "ff8080814cbc7f6f014cca52197b128a",
+	    userId: "ff8080814dc2b22d014e0c7f1a5a4c11",
 	    ver: (null)
 	};
 	var headers = {
@@ -122,7 +122,7 @@ var listSearchResultByQy = function (options, cb) {
 	    'User-Agent': 'Entplus/1.3.3 (iPhone; iOS 8.0.2; Scale/2.00)',
 	    'Accept-Language': 'en;q=1, zh-Hans;q=0.9',
 	    'Accept-Encoding': 'gzip, deflate',
-	    'Cookie': 'JSESSIONID=6E7A6C44444C635CE411B9BAD407D446',
+	    'Cookie': 'JSESSIONID=48DC86A94AFDB96188B0A01DD236B358',
 	};
 	var options = {
 	    hostname: 'app.entplus.cn',

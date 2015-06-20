@@ -1,5 +1,6 @@
 var express = require('express'),
   mongoose = require('mongoose'),
+  User = mongoose.model('User'),
   router = express.Router(),
   apiBaseUri = require('../../config/config').apiBaseUri,
   db2 = require('../../config/config').db2,
@@ -17,15 +18,15 @@ module.exports = function (app) {
   
 router.get('/', function(req, res, next) {
   // httphelps.get(apiBaseUri + '/index', function(results) {
-		res.render('index');
   // })
+  res.render('index');
 })
 
 router.get('/wordsmanage', function(req, res, next) {
   // httphelps.get(apiBaseUri + '/index', function(results) {
     Words.find({})
       .exec(function(err, results) {
-
+        console.log(req.locals);
 		    res.render('wordsmanage', {results: results});
       })
   // })

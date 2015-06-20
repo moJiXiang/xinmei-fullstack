@@ -7,6 +7,7 @@ var UserSchema = new Schema({
   name: String,
   email: String,
   pass: String,
+  role: {type: Number, default: 1},
   entfiles: Array // take down user upload files
 });
 

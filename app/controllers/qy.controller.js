@@ -229,15 +229,15 @@ var getProSoftwareCopyrightList = function(lcid, cb) {
 var initRequestOption = function(criteria, url) {
 	var data = {
 	    appKey: (null),
-	    appVersion: "1.3.3",
-	    imei: "D8F479E6-37E5-41EC-8451-BC7DECFC1484",
+	    appVersion: "1.4.5",
+	    imei: "CE71DB4A-74EC-44AB-9980-F8A46D3E9686",
 	    os: "iPhone OS",
 	    page: 1,
 	    rows: 100,
 	    type: "全部",
-	    osVersion: "8.0.2",
+	    osVersion: "8.0",
 	    sourceId: (null),
-	    userId: "ff8080814c785e09014c965bddb8147d",
+	    userId: "ff8080814dc2b22d014e0c7f1a5a4c11",
 	    ver: (null)
 	};
 	for(key in criteria) {
@@ -251,7 +251,7 @@ var initRequestOption = function(criteria, url) {
 	    'User-Agent': 'Entplus/1.3.3 (iPhone; iOS 8.0.2; Scale/2.00)',
 	    'Accept-Language': 'en;q=1, zh-Hans;q=0.9',
 	    'Accept-Encoding': 'gzip, deflate',
-	    'Cookie': 'JSESSIONID=D89086C50FC4855FB6AFD526BE764081',
+	    'Cookie': 'JSESSIONID=48DC86A94AFDB96188B0A01DD236B358',
 	};
 	var options = {
 	    hostname: 'app.entplus.cn',

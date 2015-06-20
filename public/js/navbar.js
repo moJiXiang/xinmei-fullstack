@@ -1,19 +1,8 @@
 (function() {
   $(function() {
-    var apiBaseUri, bindLoadArticleFuc, bindLoadQyFuc, bindRefreshFuc, name, sendSearch;
+    var apiBaseUri, bindLoadArticleFuc, bindLoadQyFuc, bindRefreshFuc, sendSearch;
     console.log('compile navbar coffee success');
     apiBaseUri = '/v1/api';
-    name = $.cookie('xinmei-fullstack-name');
-    if (name) {
-      $('.authentication-list').hide();
-      $('.user-list').show();
-      $('.search-field').show();
-      $('.user-list').find('.user').text(name);
-    } else {
-      $('.authentication-list').show();
-      $('.user-list').hide();
-      $('.search-field').hide();
-    }
     sendSearch = function() {
       var percent, searchval, time;
       searchval = $('#searchval').val();

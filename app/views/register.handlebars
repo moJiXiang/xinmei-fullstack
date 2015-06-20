@@ -1,45 +1,36 @@
-{{> navbar }}
-
-<div class="container">
-	<div class="login-box">
-		<div class="form-horizontal">
-		  <div class="form-group">
-		    <label for="inputEmail3" class="col-sm-2 control-label">邮箱</label>
-		    <div class="col-sm-10">
-		      <input type="email" class="form-control" name="email" id="inputEmail" placeholder="邮箱">
-		    </div>
-		    <p class="col-sm-offset-3 text-danger email-error"></p>
-		  </div>
-		  <div class="form-group">
-		    <label for="inputName" class="col-sm-2 control-label">用户名</label>
-		    <div class="col-sm-10">
-		      <input type="text" class="form-control" name="loginname" id="inputName" placeholder="用户名">
-		    </div>
-		    <p class="col-sm-offset-3 text-danger name-error"></p>
-		  </div>
-		  <div class="form-group">
-		    <label for="inputPass" class="col-sm-2 control-label">密码</label>
-		    <div class="col-sm-10">
-		      <input type="password" class="form-control" name="pass" id="inputPass" placeholder="密码">
-		    </div>
-		  </div>
-		  <div class="form-group">
-		    <label for="inputRePass" class="col-sm-2 control-label">重复密码</label>
-		    <div class="col-sm-10">
-		      <input type="password" class="form-control" name="repass" id="inputRePass" placeholder="重复密码">
-		    </div>
-		    <p class="col-sm-offset-3 text-danger pass-error"></p>
-		  </div>
-		  <div class="form-group">
-		    <div class="col-sm-offset-2 col-sm-3">
-		      <button type="button" id="regist-btn" class="btn btn-default">注册</button>
-		    </div>
-		    <div class="col-sm-3">
-		    	已有账号
-		    </div>
-		  </div>
-		</div>
-	</div>
+<div class="auth-wrapper">
+  <div class="alert alert-placeholder"></div>
+  <div class="auth-body">
+    <h1 class="sr-only">登录</h1>
+    <div class="auth-box">
+      <div class="auth-box-col">
+        {{!-- <div class="auth-box-brand"><a href="/" class="auth-box-logo"><img src="/keystone/images/logo.png" width="205" height="68" alt="itlearning"></a>
+        </div> --}}
+        <a href="/" class="auth-logo">
+	        <img src="/img/xinmei-logo.jpg" alt="">
+        </a>
+      </div>
+      <div class="auth-box-col">
+        <form method="post" action="/regist" novalidate="" class="auth-form">
+          <div class="form-group">
+            <label for="email">邮箱</label>
+            <input type="email" name="email" id="email" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="name">用户名</label>
+            <input type="name" name="name" id="name" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="pass">密码</label>
+            <input type="password" name="pass" id="pass" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="repass">重复密码</label>
+            <input type="password" name="repass" id="repass" class="form-control">
+          </div>
+          <button type="submit" class="btn btn-primary">注册</button>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
-
-<script src="/js/regist.js"></script>

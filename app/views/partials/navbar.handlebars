@@ -11,28 +11,31 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="/">
-          <img src="/img/xinmei-logo.png" class="xinmei-logo" alt="">
+          <img src="/img/xinmei-logo.jpg" class="xinmei-logo" alt="">
         </a>
       </div>
       
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav navbar-right authentication-list">
-          <li><a href="/register">注册</a></li>
-          <li><a href="/login">登录</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right user-list">
-          <li><a href="/wordsmanage">词团管理</a></li>
-          <li><a href="/searchwordsmanage">搜索词管理</a></li>
-          <li><a href="/user" class="user"></a></li>
-          <li><a href="/logout">退出</a></li>
-        </ul>
-        <div class="navbar-form navbar-right search-field">
-          <div class="form-group">
-            <input type="text" id="searchval" class="form-control" name="searchval" placeholder="搜公司">
+        {{#if user}}
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/wordsmanage">词团管理</a></li>
+            <li><a href="/searchwordsmanage">搜索词管理</a></li>
+            <li><a href="/user" class="user">{{user.name}}</a></li>
+            <li><a href="/logout">退出</a></li>
+          </ul>
+          <div class="navbar-form navbar-right search-field">
+            <div class="form-group">
+              <input type="text" id="searchval" class="form-control" name="searchval" placeholder="搜公司">
+            </div>
+            <button type="button" id="search-btn" class="btn btn-default">搜索</button>
           </div>
-          <button type="button" id="search-btn" class="btn btn-default">搜索</button>
-        </div>
+        {{else}}
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/regist">注册</a></li>
+            <li><a href="/login">登录</a></li>
+          </ul>
+        {{/if}}
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
   </nav>
