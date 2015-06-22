@@ -73,11 +73,8 @@ $ ->
 				$('.loaddata-progress>.progress-bar').attr('style', "width: 0%")
 				console.log 'test'
 				$.ajax({
-					type: 'POST',
+					type: 'GET',
 					url: "#{apiBaseUri}/qy/#{lcid}/loadqydata",
-					data:
-						lcid: lcid
-					,
 					beforeSend: ()->
 						# 用来显示进度条的时间
 						$('.loaddata-progress').show()

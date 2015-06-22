@@ -61,11 +61,8 @@
           $('.loaddata-progress>.progress-bar').attr('style', "width: 0%");
           console.log('test');
           return $.ajax({
-            type: 'POST',
+            type: 'GET',
             url: apiBaseUri + "/qy/" + lcid + "/loadqydata",
-            data: {
-              lcid: lcid
-            },
             beforeSend: function() {
               $('.loaddata-progress').show();
               return time = setInterval(function() {

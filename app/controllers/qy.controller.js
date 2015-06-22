@@ -230,14 +230,14 @@ var initRequestOption = function(criteria, url) {
 	var data = {
 	    appKey: (null),
 	    appVersion: "1.4.5",
-	    imei: "CE71DB4A-74EC-44AB-9980-F8A46D3E9686",
+	    imei: "52138BAD-F878-4654-A123-F4B392B4B92A",
 	    os: "iPhone OS",
 	    page: 1,
 	    rows: 100,
 	    type: "全部",
 	    osVersion: "8.0",
 	    sourceId: (null),
-	    userId: "ff8080814dc2b22d014e0c7f1a5a4c11",
+	    userId: "ff8080814dc2b1a5014dfca131f915c2",
 	    ver: (null)
 	};
 	for(key in criteria) {
@@ -251,7 +251,7 @@ var initRequestOption = function(criteria, url) {
 	    'User-Agent': 'Entplus/1.3.3 (iPhone; iOS 8.0.2; Scale/2.00)',
 	    'Accept-Language': 'en;q=1, zh-Hans;q=0.9',
 	    'Accept-Encoding': 'gzip, deflate',
-	    'Cookie': 'JSESSIONID=48DC86A94AFDB96188B0A01DD236B358',
+	    'Cookie': 'JSESSIONID=5F1F6254655B935D851FD6F5F299EDB1',
 	};
 	var options = {
 	    hostname: 'app.entplus.cn',
@@ -276,30 +276,28 @@ exports.loadQyEnterpriseData = function(req, res, next) {
 			res.json(new Status.SuccessStatus('Load Data success.'));
 		}
 	})
+}
 
-	// var child = cp.fork('./child.js');
-	// child.on('message', function(m) {
-	// 	console.log('Parent got message: ' , m);
-	// 	res.json(new Status.SuccessStatus('Load Data success.'));
-	// });
-	// child.send({hello: 'world'});
-	// var child = cp.spawn('node', [__dirname + 'child.js']);
+exports.loadQyData = function(req, res, next) {
+	var root = req.params.lcid;
+	console.log("------------------&&&&&&&&&&&&&");
+	console.log(root);
+	Enterprise.findOne({_id: root})
+		.exec(function(err, result) {
+			console.log(result);
+			if(result) {
+				res.redirect('/enterprise/'+root + '/industrychart');
 
-	// child.stdout.on('data', function(data) {
-	// 	console.log(data)
-	// })
-
-	//将cpu 密集型的查询放到工作线程中
-	// cp.exec('node child.js',
-	// 	function(err, stdout, stderr) {
-	// 		if(err) {
-	// 			throw err;
-	// 		}
-	// 		res.json(new Status.SuccessStatus('Load Data success.'));
-	// 		console.log(stdout);
-	// 	}
-	// )
-
+			} else{
+				getEnterAndRelationThenSave(root, function(err) {
+					if (err) {
+						console.log(err);
+					} else{
+						res.redirect('/enterprise/'+root + '/industrychart');
+					}
+				})
+			}
+		})
 }
 
 var global_entlcid = [];
@@ -379,6 +377,7 @@ var getEnterpriseAndSave = function(lcid, callback) {
 				if(err) {
 					cb(err);
 				} else {
+					console.log(result);
 					console.log(result.fei_entname);
 					cb(null, result);
 				}

@@ -28,6 +28,13 @@ exports.savekw = function(req, res, next) {
   })
 }
 
+exports.delkeyword = function(req, res, next) {
+  var id = req.params.id;
+  Words.remove({_id: id})
+    .exec(function(err, result) {
+        res.json(new Status.SuccessStatus('Save success.', result));
+    })
+}
 exports.savewords = function(req, res, next) {
   var kw = req.body.kw
   var words = req.body.words

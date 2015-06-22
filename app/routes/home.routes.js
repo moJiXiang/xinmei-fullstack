@@ -7,7 +7,8 @@ var express = require('express'),
   Words = mongoose.model('Words'),
   Searchword = mongoose.model('Searchword'),
   async = require('async'),
-  httphelps = require('../helpers/httphelps');
+  httphelps = require('../helpers/httphelps'),
+  qy = require('../controllers/qy.controller');
 
 // 连接到存储抓取数据的数据库
 var conn = mongoose.createConnection(db2)
@@ -21,6 +22,8 @@ router.get('/', function(req, res, next) {
   // })
   res.render('index');
 })
+
+router.get('/qy/:lcid/loadqydata', qy.loadQyData);
 
 router.get('/wordsmanage', function(req, res, next) {
   // httphelps.get(apiBaseUri + '/index', function(results) {

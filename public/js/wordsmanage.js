@@ -35,6 +35,18 @@
         }
       });
     });
+    $('.del-keyword-btn').on('click', function() {
+      var id, self;
+      id = $(this).data('id');
+      self = $(this);
+      return $.ajax({
+        method: 'GET',
+        url: apiBaseUri + "/delkeyword/" + id,
+        success: function(data) {
+          return self.parent().remove();
+        }
+      });
+    });
     return $('.delword-btn').on('click', function() {
       var kw, word;
       kw = $(this).parent().parent().parent().data('kw');

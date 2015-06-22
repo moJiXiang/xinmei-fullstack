@@ -31,6 +31,17 @@ $ ->
 				console.log data
 		})
 	)
+
+	$('.del-keyword-btn').on('click', ()->
+		id = $(this).data('id')
+		self = $(this)
+		$.ajax({
+			method: 'GET',
+			url: "#{apiBaseUri}/delkeyword/#{id}",
+			success: (data) ->
+				self.parent().remove()
+		})
+	)
 	$('.delword-btn').on('click', ()->
 		kw = $(this).parent().parent().parent().data('kw')
 		word = $(this).data('word')

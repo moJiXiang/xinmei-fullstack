@@ -416,7 +416,7 @@
       });
       investments.enter().append("svg:g").insert('a').attr('xlink:href', function(d) {
         if (d.entsource) {
-          return "/enterprise/" + d.entsource + "/industrychart";
+          return "/qy/" + d.entsource + "/loadqydata";
         }
       }).attr('target', '_blank').insert('text').attr("class", "investmentname").attr("x", function(d) {
         return d.x;

@@ -1,7 +1,9 @@
+.navbar-default {
+  height: 60px;
+}
 .xinmei-logo {
-  width: 100px;
   height: 50px;
-  margin-top: -15px;
+  margin-top: -10px;
 }
 .search-result {
   position: absolute;

@@ -530,7 +530,7 @@ Network = ()->
 			.insert('a')
 			.attr('xlink:href', (d)->
 				if d.entsource
-					return "/enterprise/#{d.entsource}/industrychart"
+					return "/qy/#{d.entsource}/loadqydata"
 			)
 			.attr('target', '_blank')
 			.insert('text')

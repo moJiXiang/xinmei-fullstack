@@ -12,6 +12,7 @@
 				{{#each results}}
 				  <li class="list-group-item">
 				    	{{this.keyword}}
+				    	<button class="btn btn-default pull-right del-keyword-btn" data-id={{this._id}}>删除</button>
 				  </li>
 			  	{{/each}}
 			</ul>
@@ -20,7 +21,7 @@
 	<div class="col-lg-8">
 		<div class="words-window">
 			{{#each results}}
-				<div class="words-contain" data-kw={{this.keyword}}>
+				<div class="words-contain" data-id={{this._id}} data-kw={{this.keyword}}>
 					<h4>{{this.keyword}}</h4>
 					<div class="input-group">
 					  <input type="text" class="words form-control" placeholder="需用'|'隔开，招聘|用工">

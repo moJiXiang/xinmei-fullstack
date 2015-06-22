@@ -102,16 +102,16 @@ var listSearchResultByQy = function (options, cb) {
 	var data = {
 	    appKey: (null),
 	    appVersion: "1.4.5",
-	    imei: "CE71DB4A-74EC-44AB-9980-F8A46D3E9686",
+	    imei: "52138BAD-F878-4654-A123-F4B392B4B92A",
 	    os: "iPhone OS",
 	    keyword: options.enterprise,
 	    // page: 1,
 	    // rows: 10,
 	    page: options.page,
 	    rows: options.rows,
-	    osVersion: "8.0",
+	    osVersion: "8.3",
 	    sourceId: (null),
-	    userId: "ff8080814dc2b22d014e0c7f1a5a4c11",
+	    userId: "ff8080814dc2b1a5014dfca131f915c2",
 	    ver: (null)
 	};
 	var headers = {
@@ -122,7 +122,7 @@ var listSearchResultByQy = function (options, cb) {
 	    'User-Agent': 'Entplus/1.3.3 (iPhone; iOS 8.0.2; Scale/2.00)',
 	    'Accept-Language': 'en;q=1, zh-Hans;q=0.9',
 	    'Accept-Encoding': 'gzip, deflate',
-	    'Cookie': 'JSESSIONID=48DC86A94AFDB96188B0A01DD236B358',
+	    'Cookie': 'JSESSIONID=5F1F6254655B935D851FD6F5F299EDB1',
 	};
 	var options = {
 	    hostname: 'app.entplus.cn',
