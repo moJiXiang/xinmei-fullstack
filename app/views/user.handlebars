@@ -1,13 +1,19 @@
 <div class="container">
 	{{!-- 添加用户上传文件按钮 --}}
-	<form action="/user/fileupload" id="upload" method="post" enctype="multipart/form-data">
+	<!-- <form action="/user/fileupload" id="upload" method="post" enctype="multipart/form-data">
 		<input type="file" name="uploadctl">
 		<input type='submit'>
 		<ul id="fileList">
-			
-		</ul>
-	</form>
 
+		</ul>
+	</form> -->
+
+	<form class="" action="/user/setConfig" method="post">
+		<label for="">userid</label><input type="text" name="userid">
+		<label for="">session</label><input type="text" name="session">
+		<label for="">imei</label><input type="text" name="imei">
+		<button type="submit">提交</button>
+	</form>
 </div>
 
 <script src="/js/user.js"></script>

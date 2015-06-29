@@ -62,7 +62,7 @@ module.exports = function (grunt) {
     watch: {
       options: {
         nospawn: true,
-        livereload: reloadPort
+        livereload: true
       },
       js: {
         files: [
@@ -78,7 +78,7 @@ module.exports = function (grunt) {
         ],
         tasks: ['less'],
         options: {
-          livereload: reloadPort
+          livereload: true
         }
       },
       coffee: {
@@ -98,7 +98,7 @@ module.exports = function (grunt) {
           'app/views/*.handlebars',
           'app/views/**/*.handlebars'
         ],
-        options: { livereload: reloadPort }
+        options: { livereload: true }
       }
     }
   });
@@ -107,19 +107,19 @@ module.exports = function (grunt) {
   files = grunt.config('watch.js.files');
   files = grunt.file.expand(files);
 
-  grunt.registerTask('delayed-livereload', 'Live reload after the node server has restarted.', function () {
-    var done = this.async();
-    setTimeout(function () {
-      request.get('http://localhost:' + reloadPort + '/changed?files=' + files.join(','),  function(err, res) {
-          var reloaded = !err && res.statusCode === 200;
-          if (reloaded)
-            grunt.log.ok('Delayed live reload successful.');
-          else
-            grunt.log.error('Unable to make a delayed live reload.');
-          done(reloaded);
-        });
-    }, 500);
-  });
+  // grunt.registerTask('delayed-livereload', 'Live reload after the node server has restarted.', function () {
+  //   var done = this.async();
+  //   setTimeout(function () {
+  //     request.get('http://localhost:' + reloadPort + '/changed?files=' + files.join(','),  function(err, res) {
+  //         var reloaded = !err && res.statusCode === 200;
+  //         if (reloaded)
+  //           grunt.log.ok('Delayed live reload successful.');
+  //         else
+  //           grunt.log.error('Unable to make a delayed live reload.');
+  //         done(reloaded);
+  //       });
+  //   }, 500);
+  // });
 
   grunt.loadNpmTasks('grunt-contrib-coffee');
   grunt.loadNpmTasks('grunt-contrib-handlebars');

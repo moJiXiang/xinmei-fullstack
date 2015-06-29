@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
 exports.requireUser = function(req, res, next) {
 
 	if (!req.session.user_id) {
-		if(req.originalUrl != '/login') {
+		if(req.originalUrl != '/login' && req.originalUrl != '/regist') {
 			res.redirect('/login');
 		} else {
 			next();

@@ -3,6 +3,7 @@ var express = require('express'),
   User = mongoose.model('User'),
   Enterprise = mongoose.model('Enterprise'),
   Entsrelation = mongoose.model('Entsrelation'),
+  Config = mongoose.model('Config'),
   router = express.Router(),
   request = require('request'),
   fs = require('fs'),
@@ -118,7 +119,7 @@ router.get('/analysisfile', function(req, res, next) {
 			], function(err, result) {
 				cb(null, result)
 			})
-			
+
 		}, function(err, results) {
 			var text = []
 			for (var i = 0; i < results.length; i++) {
@@ -150,4 +151,22 @@ router.get('/analysisfile', function(req, res, next) {
 		})
 
 	})
+})
+
+router.post('/setConfig', function(req, res, next) {
+    var userid = req.body.userid,
+        session = req.body.session,
+        imei = req.body.imei;
+    console.log(userid, session, imei);
+    var config = new Config({
+        userid: userid,
+        session: session,
+        imei: imei
+    })
+
+    Config.remove({}, function(err, result) {
+        config.save(function(err, result) {
+            res.send('success')
+        })
+    })
 })

@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
     Entprerelation = mongoose.model('Entprerelation'),
     Entpatent = mongoose.model('Entpatent'),
     Entcopyright = mongoose.model('Entcopyright'),
+    Config = mongoose.model('Config'),
     request = require('request'),
     Status = require('../helpers/status'),
     async = require('async'),
@@ -39,7 +40,7 @@ exports.listAnalysisResult = function(req, res, next) {
  * 	data : {
  * 		"lcid": "440301001012014111002207440000",
  *      "fei_entname": "中债商业保理有限公司",
- *      ... 
+ *      ...
  * 	}
  * }
  */
@@ -59,21 +60,38 @@ var getEnterprise = function(lcid, cb) {
 	// 暂停1秒钟，防止抓取爬虫挂掉
 	sleep.sleep(second);
 	var url = Qy + '/company/fQyEnterprisebaseinfo';
-	var options = initRequestOption({lcid: lcid}, url);
+	// var options = initRequestOption({lcid: lcid}, url);
 
-	request(options, function(err, response, body) {
-		if(err) {
-			cb(err);
-		} else {
-			var msg = JSON.parse(body).data;
-			cb(null, msg);
-		}
-	})
+    async.waterfall([
+        function(cb) {
+            Config.findOne({})
+                .lean()
+                .exec(function(err, result) {
+                    var obj = {}
+                    obj.criteria = {lcid: lcid, url: url};
+                    obj.config = result;
+                    cb(null, initRequestOption(obj));
+                })
+        },
+        function(options, cb) {
+
+        	request(options, function(err, response, body) {
+        		if(err) {
+        			cb(err);
+        		} else {
+        			var msg = JSON.parse(body).data;
+        			cb(null, msg);
+        		}
+        	})
+        }
+    ], function(err, result) {
+        cb(result);
+    })
 }
 
 // 从企+上面得到投资的相关企业信息
 /**
- * 从企+上面得到投资的相关企业信息		
+ * 从企+上面得到投资的相关企业信息
  * @return {Object}        统一的状态信息
  * {
  * 	meata :{
@@ -109,16 +127,34 @@ var getMainInvest = function(lcid, cb) {
 	// 暂停1秒钟，防止抓取爬虫挂掉
 	sleep.sleep(second);
 	var url = Qy + '/company/fQyMaininvestList';
-	var options = initRequestOption({lcid: lcid}, url);
+	// var options = initRequestOption({lcid: lcid}, url);
 
-	request(options, function(err, response, body) {
-		if(err) {
-			cb(err);
-		} else {
-			var companylist = JSON.parse(body).data.list;
-			cb(null, companylist);
-		}
-	})
+    async.waterfall([
+        function(cb) {
+            Config.findOne({})
+                .lean()
+                .exec(function(err, result) {
+                    var obj = {}
+                    obj.criteria = {lcid: lcid, url: url};
+                    obj.config = result;
+                    cb(null, initRequestOption(obj));
+                })
+        },
+        function(options, cb) {
+        	request(options, function(err, response, body) {
+        		if(err) {
+        			cb(err);
+        		} else {
+        			var companylist = JSON.parse(body).data.list;
+        			cb(null, companylist);
+        		}
+        	})
+
+        }
+
+    ], function(err, result) {
+        cb(result);
+    })
 }
 // 得到股东
 exports.fQyGetInvestMent = function(req, res, next) {
@@ -136,16 +172,34 @@ exports.fQyGetInvestMent = function(req, res, next) {
 var getInvestMent = function(lcid, cb) {
 	sleep.sleep(second);
 	var url = Qy + '/company/fQyInvestmentList';
-	var options = initRequestOption({lcid: lcid}, url);
-	
-	request(options, function(err, response, body) {
-		if(err) {
-			cb(err);
-		} else {
-			var companylist = JSON.parse(body).data.list;
-			cb(null, companylist);
-		}
-	})
+	// var options = initRequestOption({lcid: lcid}, url);
+
+
+    async.waterfall([
+        function(cb) {
+            Config.findOne({})
+                .lean()
+                .exec(function(err, result) {
+                    var obj = {}
+                    obj.criteria = {lcid: lcid, url: url};
+                    obj.config = result;
+                    cb(null, initRequestOption(obj));
+                })
+        },
+        function(options, cb) {
+
+            request(options, function(err, response, body) {
+        		if(err) {
+        			cb(err);
+        		} else {
+        			var companylist = JSON.parse(body).data.list;
+        			cb(null, companylist);
+        		}
+        	})
+        }
+    ], function(err, result) {
+        cb(result);
+    })
 }
 
 // 从企+得到分支机构
@@ -163,16 +217,32 @@ exports.fQyGetFzjg = function(req, res, next) {
 
 var getFzjg = function(lcid, cb) {
 	var url = Qy + '/company/fQyFzList';
-	
-	var options = initRequestOption({lcid: lcid}, url);
-	request(options, function(err, response, body) {
-		if(err) {
-			cb(err);
-		} else {
-			var companylist = JSON.parse(body).data.list;
-			cb(null, companylist);
-		}
-	})
+
+    async.waterfall([
+        function(cb) {
+            Config.findOne({})
+                .lean()
+                .exec(function(err, result) {
+                    var obj = {}
+                    obj.criteria = {lcid: lcid, url: url};
+                    obj.config = result;
+                    cb(null, initRequestOption(result));
+                })
+        },
+        function(options, cb) {
+
+            request(options, function(err, response, body) {
+        		if(err) {
+        			cb(err);
+        		} else {
+        			var companylist = JSON.parse(body).data.list;
+        			cb(null, companylist);
+        		}
+        	})
+        }
+    ], function(err, result) {
+        cb(result);
+    })
 }
 
 // 抓取企业的专利数据
@@ -185,64 +255,116 @@ exports.fProPatentdetailinfoList = function(req, res, next) {
 var getProPatentdetailinfoList = function(lcid, cb) {
 	var url = Qy + '/company/fProPatentdetailinfoList';
 
-	var options = initRequestOption({lcid: lcid}, url);
-	request(options, function(err, response, body) {
-		if(err) {
-			cb(err);
-		} else {
-			var prolist = JSON.parse(body).data.list;
-			cb(null, prolist);
-		}
-	})
+    async.waterfall([
+        function(cb) {
+            Config.findOne({})
+                .lean()
+                .exec(function(err, result) {
+                    var obj = {}
+                    obj.criteria = {lcid: lcid, url: url};
+                    obj.config = result;
+                    cb(null, initRequestOption(obj));
+                })
+        },
+        function(options, cb) {
+
+            request(options, function(err, response, body) {
+        		if(err) {
+        			cb(err);
+        		} else {
+        			var prolist = JSON.parse(body).data.list;
+        			cb(null, prolist);
+        		}
+        	})
+        }
+    ], function(err, result) {
+        cb(result);
+    })
 }
 
 var getPatentdetail = function(proid, cb) {
 	var url = Qy + '/company/fProPatentdetailinfo';
 
-	var options = initRequestOption({id: proid}, url);
-	request(options, function(err, response, body) {
-		if(err) {
-			cb(err);
-		} else {
-			var proinfo = JSON.parse(body).data;
-			cb(null, proinfo)
-		}
-	})
+    async.waterfall([
+        function(cb) {
+            Config.findOne({})
+                .lean()
+                .exec(function(err, result) {
+                    var obj = {}
+                    obj.criteria = {lcid: lcid, url: url};
+                    obj.config = result;
+                    cb(null, initRequestOption(obj));
+                })
+        },
+        function(options, cb) {
+
+            request(options, function(err, response, body) {
+        		if(err) {
+        			cb(err);
+        		} else {
+        			var proinfo = JSON.parse(body).data;
+        			cb(null, proinfo)
+        		}
+        	})
+        }
+    ], function(err, result) {
+        cb(result);
+    })
 }
 
 // 抓取企业的软件著作权
 var getProSoftwareCopyrightList = function(lcid, cb) {
 	var url = Qy + '/company/fProSoftwareCopyrightList';
 
-	var options = initRequestOption({lcid: lcid}, url);
-	request(options, function(err, response, body) {
-		if(err) {
-			cb(err);
-		} else {
-			var copyrightlist = JSON.parse(body).data.list;
-			cb(null, copyrightlist);
-		}
-	})
+    async.waterfall([
+        function(cb) {
+            Config.findOne({})
+                .lean()
+                .exec(function(err, result) {
+                    var obj = {}
+                    obj.criteria = {lcid: lcid, url: url};
+                    obj.config = result;
+                    cb(null, initRequestOption(obj));
+                })
+        },
+        function(options, cb) {
+
+            request(options, function(err, response, body) {
+        		if(err) {
+        			cb(err);
+        		} else {
+        			var copyrightlist = JSON.parse(body).data.list;
+        			cb(null, copyrightlist);
+        		}
+        	})
+        }
+    ], function(err, result) {
+        cb(result);
+    })
 }
 
 // 初始化对企＋的请求头
-var initRequestOption = function(criteria, url) {
+var initRequestOption = function(options) {
+    console.log(options);
+    var url = options['criteria']['url']
 	var data = {
 	    appKey: (null),
 	    appVersion: "1.4.5",
-	    imei: "52138BAD-F878-4654-A123-F4B392B4B92A",
+	    //imei: "52138BAD-F878-4654-A123-F4B392B4B92A",
 	    os: "iPhone OS",
 	    page: 1,
 	    rows: 100,
 	    type: "全部",
 	    osVersion: "8.0",
 	    sourceId: (null),
-	    userId: "ff8080814dc2b1a5014dfca131f915c2",
+	    //userId: "ff8080814dc2b1a5014dfca131f915c2",
 	    ver: (null)
 	};
-	for(key in criteria) {
-		data[key] = criteria[key];
+	for(key in options['criteria']) {
+		data[key] = options['criteria'][key];
 	}
+    data['imei'] = options['config']['imei'];
+    data['userId'] = options['config']['userid'];
 	var headers = {
 	    'Host': 'app.entplus.cn',
 	    'Content-Type': 'application/x-www-form-urlencoded',
@@ -251,8 +373,9 @@ var initRequestOption = function(criteria, url) {
 	    'User-Agent': 'Entplus/1.3.3 (iPhone; iOS 8.0.2; Scale/2.00)',
 	    'Accept-Language': 'en;q=1, zh-Hans;q=0.9',
 	    'Accept-Encoding': 'gzip, deflate',
-	    'Cookie': 'JSESSIONID=5F1F6254655B935D851FD6F5F299EDB1',
+	    //'Cookie': 'JSESSIONID=5F1F6254655B935D851FD6F5F299EDB1',
 	};
+    headers['Cookie'] = 'JSESSIONID=' + options['config']['session']
 	var options = {
 	    hostname: 'app.entplus.cn',
 	    url: url,
@@ -280,8 +403,6 @@ exports.loadQyEnterpriseData = function(req, res, next) {
 
 exports.loadQyData = function(req, res, next) {
 	var root = req.params.lcid;
-	console.log("------------------&&&&&&&&&&&&&");
-	console.log(root);
 	Enterprise.findOne({_id: root})
 		.exec(function(err, result) {
 			console.log(result);
@@ -322,15 +443,15 @@ var getEnterAndRelationThenSave = function(lcid, callback) {
 		if(err) {
 			callback(err);
 		} else {
-			// 递归查询并且保存,直到没有关系公司为止	
-			
+			// 递归查询并且保存,直到没有关系公司为止
+
 			async.waterfall([
 				function(cb) {
 					search.getMaininvestLocal(lcid, function(err, results) {
 						if(err) {
 							cb(err);
 						} else{
-							
+
 							var tasklist = _.map(results, function(result) {
 								return result.enttarget;
 							})
@@ -392,7 +513,7 @@ var getEnterpriseAndSave = function(lcid, callback) {
 				}
 			})
 		}
-	], 
+	],
 	function(err, result) {
 		if(err) {
 			callback(err);
@@ -452,9 +573,9 @@ var getEntsRelationAndSave = function(lcid, callback) {
 					cb(null, results);
 				}
 			})
-			
+
 		}
-	], 
+	],
 	function(err, results) {
 		if(err) {
 			callback(err);
@@ -501,7 +622,7 @@ var getEntpreRelationAndSave = function(lcid, callback) {
 				}
 			})
 		}
-	], 
+	],
 	function(err, results) {
 		if(err) {
 			callback(err);
@@ -517,14 +638,14 @@ var getEntcopyrightAndSave = function(lcid, callback) {
 			callback(err);
 		} else {
 			results = _.map(results, function(result){
-				return {id: result.id, 
+				return {id: result.id,
 					lcid: result.lcid,
-					regnumber: result.frj_regnumber, 
+					regnumber: result.frj_regnumber,
 					classnumber: result.frj_classnumber,
-					classname: result.frj_classname, 
-					softname: result.frj_softname, 
+					classname: result.frj_classname,
+					softname: result.frj_softname,
 					softrefname: result.frj_softrefname,
-					version: result.frj_version, 
+					version: result.frj_version,
 					owner: result.frj_owner
 				}
 			})
@@ -562,14 +683,14 @@ var getEntPatentlistAndSave = function(lcid, callback) {
 					id: patent.id,
 					lcid: patent.fpp_lcid,
 					type: patent.fpp_type,
-					sqh: patent.fpp_sqh, 
+					sqh: patent.fpp_sqh,
 					sqr: patent.fpp_sqr	,
-					mc: patent.fpp_mc, 
+					mc: patent.fpp_mc,
 					classnum: patent.fpp_classnum,
-					sqzlqr: patent.fpp_sqzlqr, 
-					fmsjr: patent.fpp_fmsjr, 
-					xxjs: patent.fpp_xxjs, 
-					flzt: patent.fpp_flzt, 
+					sqzlqr: patent.fpp_sqzlqr,
+					fmsjr: patent.fpp_fmsjr,
+					xxjs: patent.fpp_xxjs,
+					flzt: patent.fpp_flzt,
 				}
 			})
 			Entpatent.create(patentinfolist, callback);
