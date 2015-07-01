@@ -85,7 +85,9 @@ var getEnterprise = function(lcid, cb) {
         	})
         }
     ], function(err, result) {
-        cb(result);
+        console.log('---------------------');
+        console.log(result);
+        cb(null, result);
     })
 }
 
@@ -153,7 +155,7 @@ var getMainInvest = function(lcid, cb) {
         }
 
     ], function(err, result) {
-        cb(result);
+        cb(null, result);
     })
 }
 // 得到股东
@@ -198,7 +200,7 @@ var getInvestMent = function(lcid, cb) {
         	})
         }
     ], function(err, result) {
-        cb(result);
+        cb(null, result);
     })
 }
 
@@ -241,7 +243,7 @@ var getFzjg = function(lcid, cb) {
         	})
         }
     ], function(err, result) {
-        cb(result);
+        cb(null, result);
     })
 }
 
@@ -278,7 +280,7 @@ var getProPatentdetailinfoList = function(lcid, cb) {
         	})
         }
     ], function(err, result) {
-        cb(result);
+        cb(null, result);
     })
 }
 
@@ -308,7 +310,7 @@ var getPatentdetail = function(proid, cb) {
         	})
         }
     ], function(err, result) {
-        cb(result);
+        cb(null, result);
     })
 }
 
@@ -339,13 +341,12 @@ var getProSoftwareCopyrightList = function(lcid, cb) {
         	})
         }
     ], function(err, result) {
-        cb(result);
+        cb(null, result);
     })
 }
 
 // 初始化对企＋的请求头
 var initRequestOption = function(options) {
-    console.log(options);
     var url = options['criteria']['url']
 	var data = {
 	    appKey: (null),
@@ -355,7 +356,7 @@ var initRequestOption = function(options) {
 	    page: 1,
 	    rows: 100,
 	    type: "全部",
-	    osVersion: "8.0",
+	    osVersion: "8.4",
 	    sourceId: (null),
 	    //userId: "ff8080814dc2b1a5014dfca131f915c2",
 	    ver: (null)
@@ -405,7 +406,6 @@ exports.loadQyData = function(req, res, next) {
 	var root = req.params.lcid;
 	Enterprise.findOne({_id: root})
 		.exec(function(err, result) {
-			console.log(result);
 			if(result) {
 				res.redirect('/enterprise/'+root + '/industrychart');
 
