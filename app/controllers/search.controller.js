@@ -41,9 +41,9 @@ exports.listSearchResult = function(req, res, next) {
 		local: function(cb) {
 			Enterprise.list({criteria: {entname: {$regex:options.enterprise}}}, cb)
 		},
-		qy: function(cb) {
-			listSearchResultByQy(options, cb)
-		}
+		// qy: function(cb) {
+		// 	listSearchResultByQy(options, cb)
+		// }
 
 	},
 
