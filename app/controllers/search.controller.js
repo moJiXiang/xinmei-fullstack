@@ -50,27 +50,28 @@ exports.listSearchResult = function(req, res, next) {
 	function(err, results) {
 		// 查找没有数据的条目,并给赋予一个有无数据的状态
         console.log(results);
-		if(results.qy.length > 0) {
-
-			_.forEach(results.qy, function(qre) {
-				qre.status = 0;
-				_.forEach(results.local, function(lre) {
-					if (qre.lcid == lre.lcid) {
-						qre.status = 1;
-					}
-				})
-			})
-			// _.forEach(results.local, function(lre) {
-			// 			lre.status = 1;
-			// 	})
-			async.map(results.qy, countSearchdoc, function(err, results) {
-				if (err) {
-					res.json(new Status.NotFoundError('Not found results.'))
-				} else {
-					res.json(new Status.SuccessStatus('Find success.', results));
-				}
-			})
-		} else {
+		// if(results.qy.length > 0) {
+        //
+		// 	_.forEach(results.qy, function(qre) {
+		// 		qre.status = 0;
+		// 		_.forEach(results.local, function(lre) {
+		// 			if (qre.lcid == lre.lcid) {
+		// 				qre.status = 1;
+		// 			}
+		// 		})
+		// 	})
+		// 	// _.forEach(results.local, function(lre) {
+		// 	// 			lre.status = 1;
+		// 	// 	})
+		// 	async.map(results.qy, countSearchdoc, function(err, results) {
+		// 		if (err) {
+		// 			res.json(new Status.NotFoundError('Not found results.'))
+		// 		} else {
+		// 			res.json(new Status.SuccessStatus('Find success.', results));
+		// 		}
+		// 	})
+		// } else {
+		// }
 			_.forEach(results.local, function(lre) {
 						lre.status = 1;
 						lre.fei_entname = lre.entname
@@ -82,7 +83,6 @@ exports.listSearchResult = function(req, res, next) {
 					res.json(new Status.SuccessStatus('Find success.', results));
 				}
 			})
-		}
 
 
 	})
